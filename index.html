@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>웹 계산기</title>
+    <title>승범 계산기</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="calculator">
+        <div style="color: white; text-align: center; margin-bottom: 10px; font-weight: bold;">
+            승범 계산기 <span id="version-text" style="color: #ff9500; margin-left: 5px;">v1.0</span>
+        </div>
+        
         <input type="text" id="display" readonly>
         <div class="buttons">
             <button onclick="clearDisplay()" class="operator">C</button>
@@ -25,6 +29,7 @@
             <button onclick="appendValue('1')">1</button>
             <button onclick="appendValue('2')">2</button>
             <button onclick="appendValue('3')">3</button>
+            
             <button onclick="calculate()" class="equal">=</button>
             <button onclick="appendValue('0')" class="zero">0</button>
             <button onclick="appendValue('.')">.</button>
