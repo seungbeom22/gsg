@@ -1,5 +1,5 @@
 :root {
-    --main-theme: #ff9500; /* 기본 주황색 */
+    --main-theme: #ff9500; /* 기본 테마 색상 */
 }
 
 body {
@@ -7,7 +7,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #F8F9FA; /* 자연스러운 흰색(Off-white) */
+    background-color: #F8F9FA; /* 자연스러운 흰색 */
     margin: 0;
     font-family: 'Arial', sans-serif;
 }
@@ -28,7 +28,7 @@ body {
 }
 
 .hamburger {
-    font-size: 20px;
+    font-size: 24px;
     cursor: pointer;
     margin-right: 15px;
 }
@@ -58,7 +58,7 @@ body {
 
 button {
     padding: 20px 10px;
-    font-size: 22px; /* 숫자 크기 키움 */
+    font-size: 24px; /* 크기 확대 */
     font-weight: bold;
     cursor: pointer;
     border: none;
@@ -78,7 +78,7 @@ button:active {
 .operator { 
     background-color: var(--main-theme); 
     color: white; 
-    box-shadow: 0 4px #cc7600; /* 테마색에 맞춘 그림자 */
+    box-shadow: 0 4px rgba(0,0,0,0.5);
 }
 
 .equal { 
@@ -94,7 +94,7 @@ button:active {
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 1;
+    z-index: 10;
     top: 0;
     left: 0;
     background-color: #1c1c1e;
@@ -105,7 +105,7 @@ button:active {
 }
 
 .menu-content { padding: 20px; }
-.side-menu a {
+.closebtn {
     padding: 8px 32px;
     text-decoration: none;
     font-size: 36px;
@@ -114,6 +114,7 @@ button:active {
     position: absolute;
     top: 0;
     right: 25px;
+    cursor: pointer;
 }
 
 .theme-buttons {
@@ -126,4 +127,5 @@ button:active {
 .theme-buttons button {
     font-size: 14px;
     padding: 10px;
+    box-shadow: 0 2px #000;
 }
