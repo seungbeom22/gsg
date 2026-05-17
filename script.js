@@ -1,129 +1,48 @@
-:root {
-    --main-theme: #ff9500; /* 기본 주황색 */
+const display = document.getElementById('display');
+
+// 메뉴 열기/닫기
+function openMenu() {
+    document.getElementById("side-menu").style.width = "250px";
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #F8F9FA; /* 자연스러운 흰색(Off-white) */
-    margin: 0;
-    font-family: 'Arial', sans-serif;
+function closeMenu() {
+    document.getElementById("side-menu").style.width = "0";
 }
 
-.calculator {
-    background-color: #2c2c2e;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    width: 320px;
+// 테마 변경 기능
+function changeTheme(color) {
+    document.documentElement.style.setProperty('--main-theme', color);
+    const operators = document.querySelectorAll('.operator');
+    operators.forEach(op => {
+        op.style.backgroundColor = color;
+    });
+    closeMenu();
 }
 
-.calc-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    color: white;
+// 계산기 입력 기능
+function appendValue(value) {
+    if (display.value === '0' || display.value === '오류') {
+        display.value = value;
+    } else {
+        display.value += value;
+    }
 }
 
-.hamburger {
-    font-size: 20px;
-    cursor: pointer;
-    margin-right: 15px;
+function clearDisplay() {
+    display.value = '';
 }
 
-.title-area { font-weight: bold; font-size: 1.1rem; }
-#version-text { color: var(--main-theme); margin-left: 5px; }
-
-#display {
-    width: 100%;
-    height: 70px;
-    background-color: #1c1c1e;
-    color: white;
-    font-size: 32px;
-    text-align: right;
-    padding: 10px;
-    box-sizing: border-box;
-    margin-bottom: 20px;
-    border: none;
-    border-radius: 10px;
+function deleteLast() {
+    display.value = display.value.slice(0, -1);
 }
 
-.buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-}
-
-button {
-    padding: 20px 10px;
-    font-size: 22px; /* 숫자 크기 키움 */
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    border-radius: 12px;
-    background-color: #3a3a3c;
-    color: white;
-    /* 입체감 효과 */
-    box-shadow: 0 4px #1a1a1a;
-    transition: all 0.1s;
-}
-
-button:active {
-    box-shadow: 0 0px #1a1a1a;
-    transform: translateY(4px);
-}
-
-.operator { 
-    background-color: var(--main-theme); 
-    color: white; 
-    box-shadow: 0 4px #cc7600; /* 테마색에 맞춘 그림자 */
-}
-
-.equal { 
-    grid-row: span 2; 
-    background-color: #34c759; 
-    box-shadow: 0 4px #248a3d;
-}
-
-.zero { grid-column: span 2; }
-
-/* 사이드 메뉴 스타일 */
-.side-menu {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #1c1c1e;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-    color: white;
-}
-
-.menu-content { padding: 20px; }
-.side-menu a {
-    padding: 8px 32px;
-    text-decoration: none;
-    font-size: 36px;
-    color: #8e8e93;
-    display: block;
-    position: absolute;
-    top: 0;
-    right: 25px;
-}
-
-.theme-buttons {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.theme-buttons button {
-    font-size: 14px;
-    padding: 10px;
+function calculate() {
+    try {
+        if (display.value !== '') {
+            display.value = eval(display.value);
+            // 버전 고정 (버그 수정)
+        }
+    } catch (error) {
+        display.value = '오류';
+    }
 }
