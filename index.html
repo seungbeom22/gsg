@@ -3,34 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>승범 계산기</title>
+    <title>승범 계산기 v1.1</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="side-menu" class="side-menu">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">&times;</a>
+        <div class="menu-content">
+            <h3>🎨 테마 색상</h3>
+            <div class="theme-buttons">
+                <button onclick="changeTheme('#ff4d4d')" style="background-color: #ff4d4d;">빨강</button>
+                <button onclick="changeTheme('#ff9500')" style="background-color: #ff9500;">주황</button>
+                <button onclick="changeTheme('#ffcc00')" style="background-color: #ffcc00;">노랑</button>
+                <button onclick="changeTheme('#007aff')" style="background-color: #007aff;">파랑</button>
+                <button onclick="changeTheme('#af52de')" style="background-color: #af52de;">보라</button>
+                <button onclick="changeTheme('#1c1c1e')" style="background-color: #1c1c1e;">검정</button>
+                <button onclick="changeTheme('#8e8e93')" style="background-color: #8e8e93;">회색</button>
+            </div>
+            <hr>
+            <h3>👤 개발자의 말</h3>
+            <p>안녕하세요 개발자 서승범 입니다. 이것은 저의 첫 코딩 개발이니 많은 관심 부탁드립니다.</p>
+        </div>
+    </div>
+
     <div class="calculator">
-        <div style="color: white; text-align: center; margin-bottom: 10px; font-weight: bold;">
-            승범 계산기 <span id="version-text" style="color: #ff9500; margin-left: 5px;">v1.0</span>
+        <div class="calc-header">
+            <span class="hamburger" onclick="openMenu()">&#9776;</span>
+            <div class="title-area">
+                승범 계산기 <span id="version-text">v1.1</span>
+            </div>
         </div>
         
-        <input type="text" id="display" readonly>
+        <input type="text" id="display" readonly placeholder="0">
+        
         <div class="buttons">
             <button onclick="clearDisplay()" class="operator">C</button>
             <button onclick="appendValue('/')" class="operator">/</button>
             <button onclick="appendValue('*')" class="operator">*</button>
-            <button onclick="deleteLast()" class="operator">Del</button>
+            <button onclick="deleteLast()" class="operator"> → </button>
+            
             <button onclick="appendValue('7')">7</button>
             <button onclick="appendValue('8')">8</button>
             <button onclick="appendValue('9')">9</button>
             <button onclick="appendValue('-')" class="operator">-</button>
+            
             <button onclick="appendValue('4')">4</button>
             <button onclick="appendValue('5')">5</button>
             <button onclick="appendValue('6')">6</button>
             <button onclick="appendValue('+')" class="operator">+</button>
+            
             <button onclick="appendValue('1')">1</button>
             <button onclick="appendValue('2')">2</button>
             <button onclick="appendValue('3')">3</button>
-            
             <button onclick="calculate()" class="equal">=</button>
+            
             <button onclick="appendValue('0')" class="zero">0</button>
             <button onclick="appendValue('.')">.</button>
         </div>
