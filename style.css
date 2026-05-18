@@ -1,5 +1,5 @@
 :root {
-    --main-theme: #ff9500; /* 기본 테마 색상 */
+    --main-theme: #ff9500;
 }
 
 body {
@@ -7,13 +7,11 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    /* [수정] 배경을 밝은 색으로 변경 (라이트 모드) */
     background-color: #F8F9FA; 
     margin: 0;
     font-family: 'Arial', sans-serif;
 }
 
-/* 계산기 본체 스타일 */
 .calculator {
     background-color: #ffffff;
     padding: 25px;
@@ -30,7 +28,8 @@ body {
     color: #333; 
 }
 
-/* 디스플레이 가독성 조절 */
+.hamburger { cursor: pointer; font-size: 20px; margin-right: 10px; }
+
 #display {
     width: 100%;
     height: 75px;
@@ -51,7 +50,6 @@ body {
     gap: 12px;
 }
 
-/* [수정] 숫자 버튼 스타일: 회색 및 입체감 복원 */
 button {
     padding: 20px 0;
     font-size: 24px;
@@ -59,7 +57,7 @@ button {
     cursor: pointer;
     border: none;
     border-radius: 12px;
-    background-color: #e0e0e0; /* 밝은 회색 */
+    background-color: #e0e0e0;
     color: #333;
     box-shadow: 0 4px #bcbcbc;
     transition: all 0.05s;
@@ -70,23 +68,19 @@ button:active {
     transform: translateY(4px);
 }
 
-/* 연산자 공통 스타일 */
 .operator { 
     background-color: var(--main-theme); 
     color: white; 
     box-shadow: 0 4px rgba(0,0,0,0.2);
 }
 
-/* [요청] C와 백스페이스 버튼은 빨간색으로 고정 및 예외 처리 */
 .btn-red {
     background-color: #ff3b30 !important;
     color: white !important;
     box-shadow: 0 4px #c42b23 !important;
 }
 
-.zero { grid-column: span 1; }
-
-/* 사이드 메뉴 스타일 (기존 유지) */
+/* 사이드 메뉴 스타일 */
 .side-menu {
     height: 100%; width: 0; position: fixed; z-index: 10;
     top: 0; left: 0; background-color: #1c1c1e;
@@ -94,5 +88,18 @@ button:active {
 }
 .menu-content { padding: 20px; color: white; }
 .closebtn { position: absolute; top: 0; right: 25px; font-size: 36px; cursor: pointer; color: #8e8e93; }
-.theme-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
-.theme-buttons button { font-size: 14px; padding: 10px; box-shadow: none; color: white; }
+
+/* 테마 버튼 그리드 조정 */
+.theme-buttons { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 10px; 
+    margin-top: 15px; 
+}
+.theme-buttons button { 
+    font-size: 14px; 
+    padding: 12px; 
+    box-shadow: none; 
+    color: white; 
+    border: 1px solid #444;
+}
