@@ -1,11 +1,59 @@
-<input type="text" id="display" disabled>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>라이트 모드 계산기</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calculator">
+        <div class="calc-header">
+            <span class="hamburger" onclick="openMenu()">&#9776;</span>
+            <span class="title-area">계산기 <span id="version-text">v1.0</span></span>
+        </div>
 
-<div class="buttons">
-    <button class="btn-clear" onclick="clearDisplay()">C</button>
-    <button class="btn-delete" onclick="deleteLast()">⌫</button>
-    <button class="operator" onclick="appendToDisplay('%')">%</button>
-    <button class="operator" onclick="appendToDisplay('/')">÷</button>
-    
-    <button onclick="appendToDisplay('7')">7</button>
-    <button class="operator" onclick="calculate()">=</button>
-</div>
+        <input type="text" id="display" disabled>
+
+        <div class="buttons">
+            <button class="btn-clear btn-red" onclick="clearDisplay()">C</button>
+            <button class="btn-delete btn-red" onclick="deleteLast()">⌫</button>
+            <button class="operator" onclick="appendToDisplay('%')">%</button>
+            <button class="operator" onclick="appendToDisplay('/')">÷</button>
+            
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button class="operator" onclick="appendToDisplay('*')">×</button>
+            
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button class="operator" onclick="appendToDisplay('-')">-</button>
+            
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button class="operator" onclick="appendToDisplay('+')">+</button>
+            
+            <button class="zero" onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+            <button class="operator" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <div id="mySidenav" class="side-menu">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">&times;</a>
+        <div class="menu-content">
+            <h3>테마 설정</h3>
+            <div class="theme-buttons">
+                <button onclick="changeTheme('#ff9500')" style="background-color: #ff9500;">오렌지</button>
+                <button onclick="changeTheme('#007aff')" style="background-color: #007aff;">블루</button>
+                <button onclick="changeTheme('#5856d6')" style="background-color: #5856d6;">퍼플</button>
+                <button onclick="changeTheme('#ff2d55')" style="background-color: #ff2d55;">핑크</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
