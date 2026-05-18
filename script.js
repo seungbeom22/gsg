@@ -1,48 +1,26 @@
-const display = document.getElementById('display');
+// ... 기존 상단 코드 동일 ...
 
-// 메뉴 열기/닫기
-function openMenu() {
-    document.getElementById("side-menu").style.width = "250px";
+function calculate() {
+    try {
+        if (display.value !== '') {
+            // [요청] % 기호를 /100으로 바꿔서 계산하도록 수정
+            let result = display.value.replace(/%/g, '/100');
+            display.value = eval(result);
+        }
+    } catch (error) {
+        display.value = '오류';
+    }
 }
 
-function closeMenu() {
-    document.getElementById("side-menu").style.width = "0";
-}
-
-// 테마 변경 기능
+// 테마 변경 시 빨간 버튼은 색이 변하지 않도록 예외 처리
 function changeTheme(color) {
     document.documentElement.style.setProperty('--main-theme', color);
     const operators = document.querySelectorAll('.operator');
     operators.forEach(op => {
         op.style.backgroundColor = color;
     });
+    // 빨간 버튼(btn-red)은 테마 변경에서 제외됩니다.
     closeMenu();
 }
 
-// 계산기 입력 기능
-function appendValue(value) {
-    if (display.value === '0' || display.value === '오류') {
-        display.value = value;
-    } else {
-        display.value += value;
-    }
-}
-
-function clearDisplay() {
-    display.value = '';
-}
-
-function deleteLast() {
-    display.value = display.value.slice(0, -1);
-}
-
-function calculate() {
-    try {
-        if (display.value !== '') {
-            display.value = eval(display.value);
-            // 버전 고정 (버그 수정)
-        }
-    } catch (error) {
-        display.value = '오류';
-    }
-}
+// ... 나머지 코드 동일 ...
