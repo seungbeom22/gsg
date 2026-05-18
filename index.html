@@ -2,17 +2,18 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>라이트 모드 계산기</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lite Calculator v1.2</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="calculator">
         <div class="calc-header">
             <span class="hamburger" onclick="openMenu()">&#9776;</span>
-            <span class="title-area">계산기 <span id="version-text">v1.0</span></span>
+            <span class="title-area">계산기 <span id="version-text">v1.2</span></span>
         </div>
 
-        <input type="text" id="display" disabled>
+        <input type="text" id="display" disabled placeholder="0">
 
         <div class="buttons">
             <button class="btn-clear btn-red" onclick="clearDisplay()">C</button>
@@ -49,7 +50,7 @@
                 <button onclick="changeTheme('#ff9500')" style="background-color: #ff9500;">오렌지</button>
                 <button onclick="changeTheme('#007aff')" style="background-color: #007aff;">블루</button>
                 <button onclick="changeTheme('#5856d6')" style="background-color: #5856d6;">퍼플</button>
-                <button onclick="changeTheme('#ff2d55')" style="background-color: #ff2d55;">핑크</button>
+                <button onclick="changeTheme('#34c759')" style="background-color: #34c759;">그린</button>
             </div>
         </div>
     </div>
