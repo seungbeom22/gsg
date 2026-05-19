@@ -1,4 +1,5 @@
 const display = document.getElementById('display');
+const overlay = document.getElementById('overlay');
 
 function appendToDisplay(value) {
     display.value += value;
@@ -24,7 +25,6 @@ function calculate() {
     }
 }
 
-// 테마 변경 함수
 function changeTheme(color) {
     document.documentElement.style.setProperty('--main-theme', color);
     const operators = document.querySelectorAll('.operator');
@@ -34,5 +34,13 @@ function changeTheme(color) {
     closeMenu();
 }
 
-function openMenu() { document.getElementById("mySidenav").style.width = "250px"; }
-function closeMenu() { document.getElementById("mySidenav").style.width = "0"; }
+// 3번 요청: 삼선 버튼 누르고 배경 눌렀을 때 닫히게 만들기
+function openMenu() { 
+    document.getElementById("mySidenav").style.width = "250px"; 
+    overlay.style.display = "block";
+}
+
+function closeMenu() { 
+    document.getElementById("mySidenav").style.width = "0"; 
+    overlay.style.display = "none";
+}
