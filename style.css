@@ -12,6 +12,16 @@ body {
     font-family: 'Arial', sans-serif;
 }
 
+/* 3번 요청: 메뉴 열 때 뒷 배경 처리 */
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 9;
+}
+
 .calculator {
     background-color: #ffffff;
     padding: 25px;
@@ -19,6 +29,8 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     width: 320px;
     border: 1px solid #ddd;
+    position: relative;
+    z-index: 1;
 }
 
 .calc-header {
@@ -51,8 +63,8 @@ body {
 }
 
 button {
-    padding: 20px 0;
-    font-size: 24px;
+    padding: 18px 0;
+    font-size: 28px; /* 4번 요청: 숫자 크게 */
     font-weight: bold;
     cursor: pointer;
     border: none;
@@ -61,6 +73,9 @@ button {
     color: #333;
     box-shadow: 0 4px #bcbcbc;
     transition: all 0.05s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 button:active {
@@ -72,6 +87,18 @@ button:active {
     background-color: var(--main-theme); 
     color: white; 
     box-shadow: 0 4px rgba(0,0,0,0.2);
+    font-size: 32px; /* 4번 요청: 기호 더 크게 */
+}
+
+/* 1번 요청: 같다 버튼 가로로 길게 */
+.btn-equal {
+    grid-column: span 2;
+}
+
+/* 5번 요청: 점 버튼 정중앙 배치 */
+.dot-btn {
+    line-height: 1;
+    padding-bottom: 20px; 
 }
 
 .btn-red {
@@ -80,7 +107,6 @@ button:active {
     box-shadow: 0 4px #c42b23 !important;
 }
 
-/* 사이드 메뉴 스타일 */
 .side-menu {
     height: 100%; width: 0; position: fixed; z-index: 10;
     top: 0; left: 0; background-color: #1c1c1e;
@@ -89,7 +115,6 @@ button:active {
 .menu-content { padding: 20px; color: white; }
 .closebtn { position: absolute; top: 0; right: 25px; font-size: 36px; cursor: pointer; color: #8e8e93; }
 
-/* 테마 버튼 그리드 조정 */
 .theme-buttons { 
     display: grid; 
     grid-template-columns: repeat(2, 1fr); 
