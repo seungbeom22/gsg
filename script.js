@@ -14,7 +14,7 @@ function unformatNumber(num) { return num.toString().replace(/,/g, ""); }
 function memory(type) {
     let currentVal = parseFloat(unformatNumber(display.value)) || 0;
     switch(type) {
-        case 'AC': memoryValue = 0; display.value = ''; break;
+        case 'MC': memoryValue = 0; break; // 메모리만 초기화
         case 'MR': display.value = formatNumber(memoryValue); break;
         case 'M+': memoryValue += currentVal; break;
         case 'M-': memoryValue -= currentVal; break;
@@ -30,7 +30,7 @@ function appendToDisplay(value) {
     }
 }
 
-function clearDisplay() { display.value = ''; }
+function clearDisplay() { display.value = ''; } // 화면 초기화 (AC 버튼)
 function deleteLast() {
     let currentVal = unformatNumber(display.value);
     display.value = formatNumber(currentVal.slice(0, -1));
