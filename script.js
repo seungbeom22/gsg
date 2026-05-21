@@ -11,6 +11,16 @@ function formatNumber(num) {
 
 function unformatNumber(num) { return num.toString().replace(/,/g, ""); }
 
+function memory(type) {
+    let currentVal = parseFloat(unformatNumber(display.value)) || 0;
+    switch(type) {
+        case 'AC': memoryValue = 0; display.value = ''; break;
+        case 'MR': display.value = formatNumber(memoryValue); break;
+        case 'M+': memoryValue += currentVal; break;
+        case 'M-': memoryValue -= currentVal; break;
+    }
+}
+
 function appendToDisplay(value) {
     let currentVal = unformatNumber(display.value);
     if (!isNaN(value) || value === '.') {
@@ -35,16 +45,6 @@ function calculate() {
             display.value = formatNumber(result);
         }
     } catch (error) { display.value = '오류'; }
-}
-
-function memory(type) {
-    let currentVal = parseFloat(unformatNumber(display.value)) || 0;
-    switch(type) {
-        case 'MC': memoryValue = 0; break;
-        case 'MR': display.value = formatNumber(memoryValue); break;
-        case 'M+': memoryValue += currentVal; break;
-        case 'M-': memoryValue -= currentVal; break;
-    }
 }
 
 function changeTheme(color) {
