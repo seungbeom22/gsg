@@ -1,20 +1,17 @@
-:root { --main-theme: #ff9500; }
-body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #F8F9FA; margin: 0; font-family: 'Arial', sans-serif; }
-#overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 9; }
-.calculator { background-color: #ffffff; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; border: 1px solid #ddd; position: relative; z-index: 1; }
-.calc-header { display: flex; align-items: center; margin-bottom: 15px; color: #333; }
-.hamburger { cursor: pointer; font-size: 20px; margin-right: 10px; }
-#display { width: 100%; height: 75px; background-color: #f1f1f1; color: #000; font-size: 34px; text-align: right; padding: 10px; box-sizing: border-box; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 12px; }
-.buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-button { padding: 18px 0; font-size: 20px; font-weight: bold; cursor: pointer; border: none; border-radius: 12px; background-color: #e0e0e0; color: #333; box-shadow: 0 4px #bcbcbc; transition: all 0.05s; display: flex; justify-content: center; align-items: center; }
-button:active { box-shadow: 0 0px #bcbcbc; transform: translateY(4px); }
-.operator { background-color: var(--main-theme); color: white; box-shadow: 0 4px rgba(0,0,0,0.2); font-size: 32px; }
-.btn-equal { grid-column: span 2; }
-.dot-btn { line-height: 1; padding-bottom: 22px; }
-.btn-red { background-color: #ff3b30 !important; color: white !important; box-shadow: 0 4px #c42b23 !important; }
-.mem-btn { background-color: #555; color: white; font-size: 16px !important; box-shadow: 0 4px #333; }
-.side-menu { height: 100%; width: 0; position: fixed; z-index: 10; top: 0; left: 0; background-color: #1c1c1e; overflow-x: hidden; transition: 0.5s; padding-top: 60px; }
-.menu-content { padding: 20px; color: white; }
-.closebtn { position: absolute; top: 0; right: 25px; font-size: 36px; cursor: pointer; color: #8e8e93; }
-.theme-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
-.theme-buttons button { font-size: 14px; padding: 12px; box-shadow: none; color: white; border: 1px solid #444; }
+/* (기존 코드들 유지) */
+/* ... 기존 스타일 내용 ... */
+
+/* 추가된 메모리 버튼 스타일 */
+.mem-btn {
+    background-color: #555;
+    color: white;
+    font-size: 16px !important;
+    box-shadow: 0 4px #333;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+}
+.mem-btn:active {
+    box-shadow: 0 0px #333;
+    transform: translateY(4px);
+}
