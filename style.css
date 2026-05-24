@@ -1,62 +1,17 @@
-:root { --main-theme: #ff9500; }
-
-/* 1. 화면 고정 및 스크롤 방지 */
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden; /* 스크롤바 강제 제거 */
-    display: flex;
-    justify-content: center; /* 가로 중앙 정렬 */
-    align-items: center;     /* 세로 중앙 정렬 */
-    background-color: #F8F9FA;
-    font-family: 'Arial', sans-serif;
-    touch-action: none;      /* 터치 스크롤 방지 */
+html, body { 
+    margin: 0; padding: 0; width: 100%; height: 100%; 
+    overflow: hidden; 
+    display: flex; justify-content: center; align-items: center; 
+    background-color: #F8F9FA; font-family: sans-serif;
 }
-
-/* 2. 계산기 뼈대 (중앙 정렬 유지) */
-.calculator {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    width: 320px;           /* 다시 적절한 고정 크기로 복구 */
-    border: 1px solid #ddd;
+.calculator { 
+    width: 90%; max-width: 350px; /* 화면을 적절히 채우되 중앙 정렬 */
+    background: white; padding: 20px; border-radius: 20px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
 }
-
-/* 3. 버튼 레이아웃 */
-.buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-top: 15px;
-}
-
-/* 4. 버튼 스타일 */
-button {
-    padding: 15px 0;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    border-radius: 10px;
-    background-color: #e0e0e0;
-    color: #333;
-}
-
-#display {
-    width: 100%;
-    height: 60px;
-    font-size: 28px;
-    text-align: right;
-    padding: 10px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-}
-
-.operator { background-color: var(--main-theme); color: white; }
-.btn-red { background-color: #ff3b30; color: white; }
-.mem-btn { background-color: #555; color: white; font-size: 14px; }
+#display { width: 100%; height: 60px; font-size: 28px; text-align: right; margin-bottom: 15px; }
+.buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+button { padding: 15px 0; font-size: 18px; border: none; border-radius: 10px; background: #e0e0e0; font-weight: bold; }
+.operator { background: #ff9500; color: white; }
+.btn-red { background: #ff3b30; color: white; }
 .btn-equal { grid-column: span 2; }
