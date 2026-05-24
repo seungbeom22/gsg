@@ -1,41 +1,24 @@
-:root { --main-theme: #ff9500; }
-
-html, body { 
-    height: 100%; 
-    margin: 0; 
-    overflow: hidden; 
-    touch-action: none; 
-    font-family: 'Arial', sans-serif; 
-    background-color: #F8F9FA; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
+/* 수정된 부분: calculator 클래스 */
+.calculator {
+    background-color: #ffffff;
+    width: 100vw;    /* 화면 너비 100% */
+    height: 100vh;   /* 화면 높이 100% */
+    display: flex;
+    flex-direction: column; /* 세로로 쌓기 */
+    box-sizing: border-box;
+    padding: 10px;
 }
 
-#overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 9; }
-
-.calculator { 
-    background-color: #ffffff; 
-    padding: 15px; 
-    border-radius: 0; 
-    box-shadow: none; 
-    width: 100vw; 
-    height: 100vh; 
-    box-sizing: border-box; 
-    display: flex; 
-    flex-direction: column; 
-}
-
-#memory-indicator { font-size: 11px; color: #666; text-align: right; height: 15px; margin-bottom: 5px; }
-#display { width: 100%; height: 50px; font-size: 24px; text-align: right; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-
+/* 추가된 부분: 버튼 영역이 남은 공간을 차지하도록 설정 */
 .buttons { 
     display: grid; 
     grid-template-columns: repeat(4, 1fr); 
     gap: 6px; 
-    flex-grow: 1; 
+    flex: 1; /* 남은 공간을 모두 차지하여 버튼들이 보이게 함 */
+    margin-top: 10px;
 }
 
+/* 버튼 스타일 유지 (기존 코드와 동일) */
 button { 
     padding: 12px 0; 
     font-size: 16px; 
@@ -45,8 +28,3 @@ button {
     background-color: #e0e0e0; 
     font-weight: bold; 
 }
-
-.operator { background-color: var(--main-theme); color: white; }
-.btn-equal { grid-column: span 2; }
-.btn-red { background-color: #ff3b30; color: white; }
-.mem-btn { background-color: #555; color: white; font-size: 12px; }
