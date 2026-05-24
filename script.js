@@ -1,14 +1,7 @@
-/* style.css 상단 */
-.calculator {
-    width: 320px;
-    position: relative;
-    z-index: 1; /* z-index를 1로 낮춤 */
-}
+function openMenu() { document.getElementById("side-menu").style.width = "250px"; document.getElementById("overlay").style.display = "block"; }
+function closeMenu() { document.getElementById("side-menu").style.width = "0"; document.getElementById("overlay").style.display = "none"; }
 
-#overlay {
-    z-index: 9; /* 계산기보다 높아야 함 */
-}
-
-.side-menu {
-    z-index: 10; /* 가장 높아야 함 */
-}
+function appendToDisplay(value) { document.getElementById('display').value += value; }
+function clearDisplay() { document.getElementById('display').value = ''; }
+function deleteLast() { let d = document.getElementById('display'); d.value = d.value.slice(0, -1); }
+function calculate() { try { document.getElementById('display').value = eval(document.getElementById('display').value); } catch { document.getElementById('display').value = 'Error'; } }
