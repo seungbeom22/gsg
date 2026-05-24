@@ -1,29 +1,9 @@
 .calculator {
     background-color: #ffffff;
     padding: 15px;
-    border-radius: 0; /* 화면을 꽉 채우므로 둥근 모서리 제거(선택사항) */
-    box-shadow: none; /* 꽉 채울 경우 그림자 제거 */
-    width: 100vw;    /* 화면 너비의 100% */
-    height: 100vh;   /* 화면 높이의 100% */
-    box-sizing: border-box; /* 패딩을 포함하여 계산 */
-    display: flex;
-    flex-direction: column;
-}
-
-/* 버튼 그리드와 디스플레이가 화면을 채우도록 조정 */
-.buttons { 
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 10px; 
-    flex-grow: 1; /* 남은 공간을 버튼들이 차지하게 함 */
-}
-
-button { 
-    padding: 0; /* 버튼 높이를 유연하게 조절 */
-    font-size: 20px; 
-    cursor: pointer; 
-    border: none; 
-    border-radius: 12px; 
-    background-color: #e0e0e0; 
-    font-weight: bold; 
+    border-radius: 0;
+    box-shadow: none;
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
 }
