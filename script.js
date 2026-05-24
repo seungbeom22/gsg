@@ -1,5 +1,6 @@
 const display = document.getElementById('display');
 const overlay = document.getElementById('overlay');
+const memIndicator = document.getElementById('memory-indicator');
 let memoryValue = 0;
 
 function formatNumber(num) {
@@ -11,14 +12,19 @@ function formatNumber(num) {
 
 function unformatNumber(num) { return num.toString().replace(/,/g, ""); }
 
+function updateMemIndicator() {
+    memIndicator.innerText = memoryValue !== 0 ? `메모리(M): ${formatNumber(memoryValue)}` : "";
+}
+
 function memory(type) {
     let currentVal = parseFloat(unformatNumber(display.value)) || 0;
     switch(type) {
-        case 'MC': memoryValue = 0; break; // 메모리만 초기화
+        case 'MC': memoryValue = 0; break;
         case 'MR': display.value = formatNumber(memoryValue); break;
         case 'M+': memoryValue += currentVal; break;
         case 'M-': memoryValue -= currentVal; break;
     }
+    updateMemIndicator();
 }
 
 function appendToDisplay(value) {
@@ -30,7 +36,7 @@ function appendToDisplay(value) {
     }
 }
 
-function clearDisplay() { display.value = ''; } // 화면 초기화 (AC 버튼)
+function clearDisplay() { display.value = ''; }
 function deleteLast() {
     let currentVal = unformatNumber(display.value);
     display.value = formatNumber(currentVal.slice(0, -1));
