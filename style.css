@@ -1,75 +1,59 @@
 :root { --main-theme: #ff9500; }
 
-/* 1. 화면 전체 고정 및 중앙 정렬 */
+/* 1. 화면 고정 및 스크롤 방지 */
 html, body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden; /* 스크롤 방지 */
+    overflow: hidden; /* 스크롤바 강제 제거 */
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center;     /* 세로 중앙 정렬 */
     background-color: #F8F9FA;
     font-family: 'Arial', sans-serif;
+    touch-action: none;      /* 터치 스크롤 방지 */
 }
 
-/* 2. 계산기 중앙 박스 (이전 뼈대 복구) */
+/* 2. 계산기 뼈대 (중앙 정렬 유지) */
 .calculator {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    width: 320px; /* 고정 너비 복구 */
+    width: 320px;           /* 다시 적절한 고정 크기로 복구 */
     border: 1px solid #ddd;
-    position: relative;
-    z-index: 1;
 }
 
-/* 3. 메뉴 및 오버레이 설정 (메뉴 클릭을 위해 필수) */
-#overlay { 
-    display: none; 
-    position: fixed; 
-    top: 0; left: 0; 
-    width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.4); 
-    z-index: 9; 
+/* 3. 버튼 레이아웃 */
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 15px;
 }
 
-/* 사이드 메뉴 스타일 유지 */
-.side-menu { 
-    height: 100%; width: 0; position: fixed; z-index: 10; top: 0; left: 0; 
-    background-color: #1c1c1e; overflow-x: hidden; transition: 0.5s; padding-top: 60px; 
+/* 4. 버튼 스타일 */
+button {
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background-color: #e0e0e0;
+    color: #333;
 }
 
-/* 버튼 영역 복구 */
-.buttons { 
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 10px; 
-    margin-top: 15px; 
-}
-
-button { 
-    padding: 15px 0; 
-    font-size: 18px; 
-    font-weight: bold; 
-    cursor: pointer; 
-    border: none; 
-    border-radius: 10px; 
-    background-color: #e0e0e0; 
-    color: #333; 
-}
-
-#display { 
-    width: 100%; 
-    height: 60px; 
-    font-size: 28px; 
-    text-align: right; 
-    padding: 10px; 
-    box-sizing: border-box; 
-    border: 1px solid #ccc; 
-    border-radius: 10px; 
+#display {
+    width: 100%;
+    height: 60px;
+    font-size: 28px;
+    text-align: right;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 10px;
 }
 
 .operator { background-color: var(--main-theme); color: white; }
