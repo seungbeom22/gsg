@@ -1,12 +1,14 @@
-// script.js 맨 윗줄에 추가
-console.log("스크립트가 정상 연결되었습니다.");
-
-function openMenu() {
-    document.getElementById("side-menu").style.width = "250px";
-    document.getElementById("overlay").style.display = "block";
+/* style.css 상단 */
+.calculator {
+    width: 320px;
+    position: relative;
+    z-index: 1; /* z-index를 1로 낮춤 */
 }
 
-function closeMenu() {
-    document.getElementById("side-menu").style.width = "0";
-    document.getElementById("overlay").style.display = "none";
+#overlay {
+    z-index: 9; /* 계산기보다 높아야 함 */
+}
+
+.side-menu {
+    z-index: 10; /* 가장 높아야 함 */
 }
