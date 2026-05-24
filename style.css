@@ -1,30 +1,62 @@
-/* 수정된 부분: calculator 클래스 */
+:root { --main-theme: #ff9500; }
+
+/* 1. 화면 고정 및 스크롤 방지 */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* 스크롤바 강제 제거 */
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center;     /* 세로 중앙 정렬 */
+    background-color: #F8F9FA;
+    font-family: 'Arial', sans-serif;
+    touch-action: none;      /* 터치 스크롤 방지 */
+}
+
+/* 2. 계산기 뼈대 (중앙 정렬 유지) */
 .calculator {
     background-color: #ffffff;
-    width: 100vw;    /* 화면 너비 100% */
-    height: 100vh;   /* 화면 높이 100% */
-    display: flex;
-    flex-direction: column; /* 세로로 쌓기 */
-    box-sizing: border-box;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    width: 320px;           /* 다시 적절한 고정 크기로 복구 */
+    border: 1px solid #ddd;
+}
+
+/* 3. 버튼 레이아웃 */
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* 4. 버튼 스타일 */
+button {
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+#display {
+    width: 100%;
+    height: 60px;
+    font-size: 28px;
+    text-align: right;
     padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 10px;
 }
 
-/* 추가된 부분: 버튼 영역이 남은 공간을 차지하도록 설정 */
-.buttons { 
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 6px; 
-    flex: 1; /* 남은 공간을 모두 차지하여 버튼들이 보이게 함 */
-    margin-top: 10px;
-}
-
-/* 버튼 스타일 유지 (기존 코드와 동일) */
-button { 
-    padding: 12px 0; 
-    font-size: 16px; 
-    cursor: pointer; 
-    border: none; 
-    border-radius: 8px; 
-    background-color: #e0e0e0; 
-    font-weight: bold; 
-}
+.operator { background-color: var(--main-theme); color: white; }
+.btn-red { background-color: #ff3b30; color: white; }
+.mem-btn { background-color: #555; color: white; font-size: 14px; }
+.btn-equal { grid-column: span 2; }
