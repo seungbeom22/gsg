@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lite Calculator v1.3</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -47,29 +47,6 @@
             <button onclick="appendToDisplay('0')">0</button>
             <button class="dot-btn" onclick="appendToDisplay('.')">.</button>
             <button class="operator btn-equal" onclick="calculate()">=</button>
-        </div>
-    </div>
-
-    <div id="mySidenav" class="side-menu">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">&times;</a>
-        <div class="menu-content">
-            <div class="dev-info">
-                <h3>Developer</h3>
-                <p>안녕하세요 파수범 입니다. 첫코딩 작품입니다.</p>
-            </div>
-            <h3>테마 설정</h3>
-            <div class="theme-buttons">
-                <button onclick="changeTheme('#000000')" style="background-color: #000000;">블랙</button>
-                <button onclick="changeTheme('#800080')" style="background-color: #800080;">자주</button>
-                <button onclick="changeTheme('#007aff')" style="background-color: #007aff;">파랑</button>
-                <button onclick="changeTheme('#5AC8FA')" style="background-color: #5AC8FA;">하늘</button>
-                <button onclick="changeTheme('#ff9500')" style="background-color: #ff9500;">주황</button>
-                <button onclick="changeTheme('#FFCC00')" style="background-color: #FFCC00;">노랑</button>
-                <button onclick="changeTheme('#FF3B30')" style="background-color: #FF3B30;">빨강</button>
-                <button onclick="changeTheme('#4CD964')" style="background-color: #4CD964;">초록</button>
-                <button onclick="changeTheme('#FF1493')" style="background-color: #FF1493;">핑크</button>
-                <button onclick="changeTheme('#8E8E93')" style="background-color: #8E8E93;">회색</button>
-            </div>
         </div>
     </div>
     <script src="script.js"></script>
