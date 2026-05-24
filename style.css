@@ -1,14 +1,29 @@
-:root { --main-theme: #ff9500; }
-/* 스크롤 방지: html과 body를 화면에 딱 맞게 고정 */
-html, body { height: 100%; margin: 0; overflow: hidden; touch-action: none; font-family: 'Arial', sans-serif; background-color: #F8F9FA; display: flex; justify-content: center; align-items: center; }
+.calculator {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 0; /* 화면을 꽉 채우므로 둥근 모서리 제거(선택사항) */
+    box-shadow: none; /* 꽉 채울 경우 그림자 제거 */
+    width: 100vw;    /* 화면 너비의 100% */
+    height: 100vh;   /* 화면 높이의 100% */
+    box-sizing: border-box; /* 패딩을 포함하여 계산 */
+    display: flex;
+    flex-direction: column;
+}
 
-#overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 9; }
-.calculator { background-color: #ffffff; padding: 15px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 280px; }
-#memory-indicator { font-size: 11px; color: #666; text-align: right; height: 15px; margin-bottom: 5px; }
-#display { width: 100%; height: 50px; font-size: 24px; text-align: right; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-.buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-button { padding: 12px 0; font-size: 16px; cursor: pointer; border: none; border-radius: 8px; background-color: #e0e0e0; font-weight: bold; }
-.operator { background-color: var(--main-theme); color: white; }
-.btn-equal { grid-column: span 2; }
-.btn-red { background-color: #ff3b30; color: white; }
-.mem-btn { background-color: #555; color: white; font-size: 12px; }
+/* 버튼 그리드와 디스플레이가 화면을 채우도록 조정 */
+.buttons { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 10px; 
+    flex-grow: 1; /* 남은 공간을 버튼들이 차지하게 함 */
+}
+
+button { 
+    padding: 0; /* 버튼 높이를 유연하게 조절 */
+    font-size: 20px; 
+    cursor: pointer; 
+    border: none; 
+    border-radius: 12px; 
+    background-color: #e0e0e0; 
+    font-weight: bold; 
+}
