@@ -11,17 +11,10 @@ function updateMemIndicator() { memIndicator.innerText = memoryValue !== 0 ? `M:
 
 function memory(type) {
     let currentVal = parseFloat(unformatNumber(display.value)) || 0;
-    if(type === 'MC') {
-        memoryValue = 0;
-    } else if(type === 'MR') {
-        display.value = formatNumber(memoryValue);
-    } else if(type === 'M+') {
-        memoryValue += currentVal;
-        clearDisplay(); // 계산 후 화면 지움
-    } else if(type === 'M-') {
-        memoryValue -= currentVal;
-        clearDisplay(); // 계산 후 화면 지움
-    }
+    if(type === 'MC') { memoryValue = 0; }
+    else if(type === 'MR') { display.value = formatNumber(memoryValue); }
+    else if(type === 'M+') { memoryValue += currentVal; clearDisplay(); }
+    else if(type === 'M-') { memoryValue -= currentVal; clearDisplay(); }
     updateMemIndicator();
 }
 
