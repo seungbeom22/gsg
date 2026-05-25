@@ -23,8 +23,14 @@ function memory(type) {
     switch(type) {
         case 'MC': memoryValue = 0; break;
         case 'MR': display.value = formatNumber(memoryValue); break;
-        case 'M+': memoryValue += currentVal; break;
-        case 'M-': memoryValue -= currentVal; break;
+        case 'M+': 
+            memoryValue += currentVal; 
+            display.value = ''; // 여기서 입력창을 비웁니다
+            break;
+        case 'M-': 
+            memoryValue -= currentVal; 
+            display.value = ''; // 여기서 입력창을 비웁니다
+            break;
     }
     updateMemIndicator();
 }
