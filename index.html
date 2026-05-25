@@ -1,79 +1,21 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lite Calculator v1.2</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div id="overlay" onclick="closeMenu()"></div>
-
-    <div class="calculator">
-        <div class="calc-header">
-            <span class="hamburger" onclick="openMenu()">&#9776;</span>
-            <span class="title-area">계산기 <span id="version-text">v1.2</span></span>
-        </div>
-
-        <div id="memory-indicator" style="font-size: 12px; color: #666; text-align: right; margin-bottom: 5px; height: 15px;"></div>
-        <input type="text" id="display" disabled placeholder="0">
-
-        <div class="buttons">
-            <button class="mem-btn" onclick="memory('MC')">MC</button>
-            <button class="mem-btn" onclick="memory('MR')">MR</button>
-            <button class="mem-btn" onclick="memory('M+')">M+</button>
-            <button class="mem-btn" onclick="memory('M-')">M-</button>
-            
-            <button class="btn-clear btn-red" onclick="clearDisplay()">AC</button>
-            <button class="btn-delete btn-red" onclick="deleteLast()">⌫</button>
-            <button class="operator" onclick="appendToDisplay('%')">%</button>
-            <button class="operator" onclick="appendToDisplay('/')">÷</button>
-            
-            <button onclick="appendToDisplay('7')">7</button>
-            <button onclick="appendToDisplay('8')">8</button>
-            <button onclick="appendToDisplay('9')">9</button>
-            <button class="operator" onclick="appendToDisplay('*')">×</button>
-            
-            <button onclick="appendToDisplay('4')">4</button>
-            <button onclick="appendToDisplay('5')">5</button>
-            <button onclick="appendToDisplay('6')">6</button>
-            <button class="operator" onclick="appendToDisplay('-')">-</button>
-            
-            <button onclick="appendToDisplay('1')">1</button>
-            <button onclick="appendToDisplay('2')">2</button>
-            <button onclick="appendToDisplay('3')">3</button>
-            <button class="operator" onclick="appendToDisplay('+')">+</button>
-            
-            <button onclick="appendToDisplay('0')">0</button>
-            <button class="dot-btn" onclick="appendToDisplay('.')">.</button>
-            <button class="operator btn-equal" onclick="calculate()">=</button>
-        </div>
+<div class="menu-content">
+    <div class="dev-info" style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #444;">
+        <h3 style="color: #fff; margin-bottom: 10px;">Developer</h3>
+        <p style="font-size: 14px; color: #bbb; line-height: 1.6;">
+            안녕하세요 파수범입니다. 이것은 저의 첫코딩 작품이니 많은 관심 부탁드립니다.
+        </p>
     </div>
-
-    <div id="mySidenav" class="side-menu">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">&times;</a>
-        <div class="menu-content">
-            <div class="dev-info" style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #444;">
-                <h3 style="color: #fff; margin-bottom: 10px;">Developer</h3>
-                <p style="font-size: 14px; color: #bbb; line-height: 1.6;">
-                    안녕하세요 파수범 입니다. 이것은 저의 첫코딩 작품이니 많은 관심 부탁 드립니다.
-                </p>
-            </div>
-            <h3>테마 설정</h3>
-            <div class="theme-buttons">
-                <button onclick="changeTheme('#000000')" style="background-color: #000000;">블랙</button>
-                <button onclick="changeTheme('#800080')" style="background-color: #800080;">자주</button>
-                <button onclick="changeTheme('#007aff')" style="background-color: #007aff;">파랑</button>
-                <button onclick="changeTheme('#5AC8FA')" style="background-color: #5AC8FA;">하늘</button>
-                <button onclick="changeTheme('#ff9500')" style="background-color: #ff9500;">주황</button>
-                <button onclick="changeTheme('#FFCC00')" style="background-color: #FFCC00;">노랑</button>
-                <button onclick="changeTheme('#FF3B30')" style="background-color: #FF3B30;">빨강</button>
-                <button onclick="changeTheme('#4CD964')" style="background-color: #4CD964;">초록</button>
-                <button onclick="changeTheme('#FF1493')" style="background-color: #FF1493;">핑크</button>
-                <button onclick="changeTheme('#8E8E93')" style="background-color: #8E8E93;">회색</button>
-            </div>
-        </div>
+    <h3>테마 설정</h3>
+    <div class="theme-buttons">
+        <button onclick="changeTheme('#FF3B30')">빨강</button>
+        <button onclick="changeTheme('#FF9500')">주황</button>
+        <button onclick="changeTheme('#FFCC00')">노랑</button>
+        <button onclick="changeTheme('#4CD964')">초록</button>
+        <button onclick="changeTheme('#007AFF')">파랑</button>
+        <button onclick="changeTheme('#5AC8FA')">하늘</button>
+        <button onclick="changeTheme('#AEEA00')">연두</button>
+        <button onclick="changeTheme('#8E8E93')">회색</button>
+        <button onclick="changeTheme('#800080')">보라</button>
+        <button onclick="changeTheme('#000000')">검정</button>
     </div>
-    <script src="script.js"></script>
-</body>
-</html>
+</div>
