@@ -75,9 +75,19 @@ function changeTheme(color) {
 function openMenu() { 
     document.getElementById("mySidenav").style.width = "250px"; 
     overlay.style.display = "block";
+    window.history.pushState({menu: "open"}, "");
 }
 
 function closeMenu() { 
     document.getElementById("mySidenav").style.width = "0"; 
     overlay.style.display = "none";
+    if (window.history.state && window.history.state.menu === "open") {
+        window.history.back();
+    }
 }
+
+window.onpopstate = function() {
+    if (document.getElementById("mySidenav").style.width !== "0") {
+        closeMenu();
+    }
+};
