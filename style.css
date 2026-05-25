@@ -2,7 +2,7 @@
 
 body { 
     display: flex; justify-content: center; align-items: center; 
-    height: 100dvh; /* 100vh를 100dvh로 값만 수정 */
+    height: 100dvh; 
     background-color: #F8F9FA; margin: 0; 
     font-family: 'Arial', sans-serif; overflow: hidden; touch-action: none; 
 }
@@ -13,12 +13,12 @@ body {
     background-color: #ffffff; padding: 25px; border-radius: 20px; 
     box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; 
     border: 1px solid #ddd; position: relative; z-index: 1; 
-    max-height: 90dvh; /* 새로 추가하는 게 아니라, calculator 속성에 이 값만 부여 */
-    overflow-y: auto;  /* 새로 추가하는 게 아니라, calculator 속성에 이 값만 부여 */
+    max-height: 90dvh; 
+    overflow: hidden; 
 }
 
-.calc-header { display: flex; align-items: center; margin-bottom: 15px; color: #333; }
-.hamburger { cursor: pointer; font-size: 20px; margin-right: 10px; }
+.calc-header { display: flex; align-items: center; justify-content: center; margin-bottom: 15px; color: #333; position: relative; }
+.hamburger { cursor: pointer; font-size: 28px; margin-right: 10px; position: absolute; left: 0; }
 
 #display { 
     width: 100%; height: 75px; background-color: #f1f1f1; color: #000; 
@@ -29,7 +29,7 @@ body {
 .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 
 button { 
-    padding: 18px 0; font-size: 20px; font-weight: bold; cursor: pointer; 
+    padding: 18px 0; font-size: 24px; font-weight: bold; cursor: pointer; 
     border: none; border-radius: 15px; background-color: #e0e0e0; 
     color: #333; transition: all 0.2s; display: flex; 
     justify-content: center; align-items: center; 
