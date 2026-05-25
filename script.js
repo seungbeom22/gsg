@@ -25,11 +25,11 @@ function memory(type) {
         case 'MR': display.value = formatNumber(memoryValue); break;
         case 'M+': 
             memoryValue += currentVal; 
-            display.value = ''; // 여기서 입력창을 비웁니다
+            display.value = ''; 
             break;
         case 'M-': 
             memoryValue -= currentVal; 
-            display.value = ''; // 여기서 입력창을 비웁니다
+            display.value = ''; 
             break;
     }
     updateMemIndicator();
@@ -75,11 +75,9 @@ function changeTheme(color) {
 function openMenu() { 
     document.getElementById("mySidenav").style.width = "250px"; 
     overlay.style.display = "block";
-    window.history.pushState({menu: "open"}, "");
 }
 
 function closeMenu() { 
     document.getElementById("mySidenav").style.width = "0"; 
     overlay.style.display = "none";
-    if (window.history.state && window.history.state.menu === "open") window.history.back();
 }
