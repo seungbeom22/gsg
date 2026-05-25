@@ -3,88 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로또 생성기 v1.1</title>
-    <style>
-        /* 기존 테마 설정 유지 */
-        :root { --bg-color: #fff9e6; --text-color: #333333; --btn-color: #ffc107; --sidebar-bg: #ffffff; }
-        body.theme-black { --bg-color: #1a1a1a; --text-color: #f5f5f5; --btn-color: #444444; --sidebar-bg: #2d2d2d; }
-        body.theme-gray { --bg-color: #e0e0e0; --text-color: #222222; --btn-color: #757575; --sidebar-bg: #f5f5f5; }
-
-        body { background-color: var(--bg-color); color: var(--text-color); font-family: 'Malgun Gothic', sans-serif; transition: 0.4s; text-align: center; margin: 0; padding: 20px; }
-        
-        /* 공 스타일: 일렬 배치 핵심 */
-        .result-container { display: flex; justify-content: center; gap: 5px; margin: 30px 0; min-height: 50px; }
-        .ball { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px; flex-shrink: 0; }
-        
-        /* 버튼 스타일 */
-        .action-btns { margin-top: 20px; }
-        button { padding: 12px 20px; margin: 5px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .btn-gen { background-color: var(--btn-color); }
-        .btn-save { background-color: #4caf50; color: white; }
-
-        /* 기록 영역 */
-        #history { margin-top: 30px; text-align: center; }
-        .history-item { margin: 8px 0; font-size: 15px; }
-    </style>
+    <title>Lite Calculator v1.2</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="overlay" onclick="closeMenu()"></div>
 
-    <h1>🎰 행운의 로또 생성기</h1>
-    
-    <div class="action-btns">
-        <button class="btn-gen" onclick="generateLotto()">번호 추첨하기</button>
-        <button class="btn-save" onclick="saveLotto()">기록 저장하기</button>
+    <div id="mySidenav" class="side-menu">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">&times;</a>
+        <div class="menu-content">
+            <div class="dev-info" style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #444;">
+                <h3 style="color: #fff; margin-bottom: 10px;">Developer</h3>
+                <p style="font-size: 14px; color: #bbb; line-height: 1.6;">
+                    안녕하세요 파수범입니다. 이것은 저의 첫코딩 작품이니 많은 관심 부탁드립니다.
+                </p>
+            </div>
+            <h3>테마 설정</h3>
+            <div class="theme-buttons">
+                <button onclick="changeTheme('#FF3B30')" style="background-color: #FF3B30;">빨강</button>
+                <button onclick="changeTheme('#FF9500')" style="background-color: #FF9500;">주황</button>
+                <button onclick="changeTheme('#FFCC00')" style="background-color: #FFCC00;">노랑</button>
+                <button onclick="changeTheme('#4CD964')" style="background-color: #4CD964;">초록</button>
+                <button onclick="changeTheme('#007AFF')" style="background-color: #007AFF;">파랑</button>
+                <button onclick="changeTheme('#5AC8FA')" style="background-color: #5AC8FA;">하늘</button>
+                <button onclick="changeTheme('#AEEA00')" style="background-color: #AEEA00;">연두</button>
+                <button onclick="changeTheme('#8E8E93')" style="background-color: #8E8E93;">회색</button>
+                <button onclick="changeTheme('#800080')" style="background-color: #800080;">보라</button>
+                <button onclick="changeTheme('#000000')" style="background-color: #000000;">검정</button>
+            </div>
+        </div>
     </div>
 
-    <div class="result-container" id="result"></div>
-    
-    <div id="history">
-        <h3>📜 추첨 기록</h3>
+    <div class="calculator">
+        <div class="calc-header">
+            <span class="hamburger" onclick="openMenu()">&#9776;</span>
+            <span class="title-area">계산기 <span id="version-text">v1.2</span></span>
+        </div>
+
+        <div id="memory-indicator" style="font-size: 12px; color: #666; text-align: right; margin-bottom: 5px; height: 15px;"></div>
+        <input type="text" id="display" disabled placeholder="0">
+
+        <div class="buttons">
+            <button class="mem-btn" onclick="memory('MC')">MC</button>
+            <button class="mem-btn" onclick="memory('MR')">MR</button>
+            <button class="mem-btn" onclick="memory('M+')">M+</button>
+            <button class="mem-btn" onclick="memory('M-')">M-</button>
+            
+            <button class="btn-clear btn-red" onclick="clearDisplay()">AC</button>
+            <button class="btn-delete btn-red" onclick="deleteLast()">⌫</button>
+            <button class="operator" onclick="appendToDisplay('%')">%</button>
+            <button class="operator" onclick="appendToDisplay('/')">÷</button>
+            
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button class="operator" onclick="appendToDisplay('*')">×</button>
+            
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button class="operator" onclick="appendToDisplay('-')">-</button>
+            
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button class="operator" onclick="appendToDisplay('+')">+</button>
+            
+            <button onclick="appendToDisplay('0')">0</button>
+            <button class="dot-btn" onclick="appendToDisplay('.')">.</button>
+            <button class="operator btn-equal" onclick="calculate()">=</button>
+        </div>
     </div>
 
-    <script>
-        let currentNumbers = []; // 현재 화면에 떠 있는 번호
-
-        function getBallColor(num) {
-            if (num <= 10) return '#fbc400';
-            if (num <= 20) return '#69c8f2';
-            if (num <= 30) return '#ff7272';
-            if (num <= 40) return '#aaaaaa';
-            return '#b0d840';
-        }
-
-        // 1. 번호 생성 (저장은 아직 안 함)
-        function generateLotto() {
-            currentNumbers = [];
-            while(currentNumbers.length < 6) {
-                const num = Math.floor(Math.random() * 45) + 1;
-                if(!currentNumbers.includes(num)) currentNumbers.push(num);
-            }
-            currentNumbers.sort((a, b) => a - b);
-
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '';
-            currentNumbers.forEach(num => {
-                const ball = document.createElement('div');
-                ball.className = 'ball';
-                ball.innerText = num;
-                ball.style.backgroundColor = getBallColor(num);
-                resultDiv.appendChild(ball);
-            });
-        }
-
-        // 2. 저장 버튼 눌렀을 때만 기록 추가
-        function saveLotto() {
-            if (currentNumbers.length === 0) {
-                alert("먼저 번호를 추첨해주세요!");
-                return;
-            }
-            const historyDiv = document.getElementById('history');
-            const p = document.createElement('p');
-            p.className = 'history-item';
-            p.innerText = `기록: ${currentNumbers.join(', ')}`;
-            historyDiv.appendChild(p);
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
