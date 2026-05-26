@@ -10,10 +10,6 @@
     <div id="mySidenav" class="side-menu">
         <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()">&times;</a>
         <div class="menu-content">
-            <div class="dev-info" style="border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 15px;">
-                <h3 style="color: #fff;">Developer</h3>
-                <p style="color: #bbb; font-size: 14px;">안녕하세요 파수범입니다. 이것은 저의 첫코딩 작품입니다.</p>
-            </div>
             <h3>테마 설정</h3>
             <div class="theme-buttons">
                 <button onclick="changeTheme('#FF3B30')">빨강</button>
@@ -23,19 +19,18 @@
                 <button onclick="changeTheme('#007AFF')">파랑</button>
                 <button onclick="changeTheme('#5AC8FA')">하늘</button>
                 <button onclick="changeTheme('#8E8E93')">회색</button>
-                <button onclick="changeTheme('#000000')">검정</button>
+                <button onclick="changeTheme('#000000')" class="btn-black">검정</button>
             </div>
         </div>
     </div>
-
     <div class="calculator">
         <div class="calc-header">
             <span class="hamburger" onclick="openMenu()">&#9776;</span>
-            <span class="title-area">계산기 v1.7</span>
+            <span class="title-area">계산기 <span id="version-text">v1.7</span></span>
         </div>
         <input type="text" id="display" disabled placeholder="0">
         <div class="buttons">
-            <button class="btn-red" onclick="clearDisplay()">AC</button>
+            <button class="btn-clear btn-red" onclick="clearDisplay()">AC</button>
             <button class="operator" onclick="calculate()" style="grid-column: span 3;">=</button>
             <button onclick="appendToDisplay('7')">7</button>
             <button onclick="appendToDisplay('8')">8</button>
