@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Lite Calculator v1.7</title>
+    <title>Lite Calculator v1.8</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -30,25 +30,34 @@
     <div class="calculator">
         <div class="calc-header">
             <span class="hamburger" onclick="openMenu()">&#9776;</span>
-            <span class="title-area">계산기 v1.7</span>
+            <span class="title-area">계산기 v1.8</span>
         </div>
         <input type="text" id="display" readonly placeholder="0">
         <div class="buttons">
+            <button class="mem-btn" onclick="memory('MC')">MC</button>
+            <button class="mem-btn" onclick="memory('MR')">MR</button>
+            <button class="mem-btn" onclick="memory('M+')">M+</button>
+            <button class="mem-btn" onclick="memory('M-')">M-</button>
+            
             <button class="btn-red" onclick="clearDisplay()">AC</button>
             <button class="operator" onclick="calculate()" style="grid-column: span 2;">=</button>
             <button class="operator" onclick="appendToDisplay('/')">÷</button>
+            
             <button onclick="appendToDisplay('7')">7</button>
             <button onclick="appendToDisplay('8')">8</button>
             <button onclick="appendToDisplay('9')">9</button>
             <button class="operator" onclick="appendToDisplay('*')">×</button>
+            
             <button onclick="appendToDisplay('4')">4</button>
             <button onclick="appendToDisplay('5')">5</button>
             <button onclick="appendToDisplay('6')">6</button>
             <button class="operator" onclick="appendToDisplay('-')">-</button>
+            
             <button onclick="appendToDisplay('1')">1</button>
             <button onclick="appendToDisplay('2')">2</button>
             <button onclick="appendToDisplay('3')">3</button>
             <button class="operator" onclick="appendToDisplay('+')">+</button>
+            
             <button onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
             <button onclick="appendToDisplay('.')">.</button>
             <button class="operator" onclick="calculate()">=</button>
