@@ -1,62 +1,9 @@
-const display = document.getElementById('display');
-const overlay = document.getElementById('overlay');
-const memIndicator = document.getElementById('memory-indicator');
-let memoryValue = 0;
-
-function formatNumber(num) {
-    if (!num) return "";
-    const parts = num.toString().replace(/,/g, "").split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
-}
-
-function unformatNumber(num) { return num.toString().replace(/,/g, ""); }
-
-function updateMemIndicator() {
-    memIndicator.innerText = memoryValue !== 0 ? `메모리(M): ${formatNumber(memoryValue)}` : "";
-}
-
-function memory(type) {
-    let currentVal = parseFloat(unformatNumber(display.value)) || 0;
-    switch(type) {
-        case 'MC': memoryValue = 0; break;
-        case 'MR': display.value = formatNumber(memoryValue); break;
-        case 'M+': memoryValue += currentVal; display.value = ''; break;
-        case 'M-': memoryValue -= currentVal; display.value = ''; break;
-    }
-    updateMemIndicator();
-}
-
-function appendToDisplay(value) {
-    let currentVal = unformatNumber(display.value);
-    if (!isNaN(value) || value === '.') {
-        display.value = formatNumber(currentVal + value);
-    } else {
-        display.value += value;
-    }
-}
-
-function clearDisplay() { display.value = ''; }
-
-function deleteLast() {
-    let currentVal = unformatNumber(display.value);
-    display.value = formatNumber(currentVal.slice(0, -1));
-}
-
-function calculate() {
-    try {
-        if (display.value !== '') {
-            let expression = unformatNumber(display.value);
-            expression = expression.replace(/%/g, '/100').replace(/×/g, '*').replace(/÷/g, '/');
-            let result = eval(expression);
-            display.value = formatNumber(result);
-        }
-    } catch (error) { display.value = '오류'; }
-}
+// ... (기존 상단 로직 동일)
 
 function changeTheme(color) {
     document.documentElement.style.setProperty('--main-theme', color);
-    // 검정색 테마일 때 글자색 하얀색으로 변경
+    
+    // 검정색 테마일 때 글자색을 흰색으로, 아니면 검정색으로 설정
     const textColor = (color === '#000000') ? '#ffffff' : '#000000';
     document.documentElement.style.setProperty('--text-color', textColor);
     
@@ -68,20 +15,12 @@ function openMenu() {
     document.getElementById("mySidenav").style.width = "250px"; 
     overlay.style.display = "block";
     setTimeout(() => { overlay.style.opacity = "1"; }, 10);
-    window.history.pushState({menu: "open"}, "");
 }
 
 function closeMenu() { 
     document.getElementById("mySidenav").style.width = "0"; 
     overlay.style.opacity = "0";
     setTimeout(() => { overlay.style.display = "none"; }, 300);
-    if (window.history.state && window.history.state.menu === "open") {
-        window.history.back();
-    }
 }
 
-window.onpopstate = function() {
-    if (document.getElementById("mySidenav").style.width !== "0") {
-        closeMenu();
-    }
-};
+// ... (나머지 로직 동일)
