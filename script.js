@@ -32,3 +32,32 @@ function closeMenu() {
     }
 }
 // ... (하단 로직 동일)
+// ... (기존 계산 로직 동일)
+
+function changeTheme(color) {
+    document.documentElement.style.setProperty('--main-theme', color);
+    
+    // 검정색 선택 시 dark-mode 클래스 추가
+    if (color === '#000000') {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+    
+    document.querySelectorAll('.operator').forEach(op => op.style.backgroundColor = color);
+    closeMenu();
+}
+
+function openMenu() { 
+    document.getElementById("mySidenav").style.width = "250px"; 
+    overlay.style.display = "block";
+    requestAnimationFrame(() => { overlay.style.opacity = "1"; });
+}
+
+function closeMenu() { 
+    document.getElementById("mySidenav").style.width = "0"; 
+    overlay.style.opacity = "0";
+    setTimeout(() => { overlay.style.display = "none"; }, 400);
+}
+
+// ... (계산 관련 함수들 그대로 유지)
