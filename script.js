@@ -3,9 +3,14 @@
 function changeTheme(color) {
     document.documentElement.style.setProperty('--main-theme', color);
     
-    // 검정색 테마일 때 글자색을 흰색으로, 아니면 검정색으로 설정
-    const textColor = (color === '#000000') ? '#ffffff' : '#000000';
-    document.documentElement.style.setProperty('--text-color', textColor);
+    // 검정 테마일 때 글자색 하얀색으로, 아닐 땐 검정색으로 설정
+    if (color === '#000000') {
+        document.documentElement.style.setProperty('--text-color', '#000000'); // 계산기 글자
+        document.documentElement.style.setProperty('--menu-text', '#ffffff');  // 메뉴 글자
+    } else {
+        document.documentElement.style.setProperty('--text-color', '#000000');
+        document.documentElement.style.setProperty('--menu-text', '#ffffff');
+    }
     
     document.querySelectorAll('.operator').forEach(op => op.style.backgroundColor = color);
     closeMenu();
@@ -14,13 +19,16 @@ function changeTheme(color) {
 function openMenu() { 
     document.getElementById("mySidenav").style.width = "250px"; 
     overlay.style.display = "block";
-    setTimeout(() => { overlay.style.opacity = "1"; }, 10);
+    requestAnimationFrame(() => { overlay.style.opacity = "1"; });
+    window.history.pushState({menu: "open"}, "");
 }
 
 function closeMenu() { 
     document.getElementById("mySidenav").style.width = "0"; 
     overlay.style.opacity = "0";
     setTimeout(() => { overlay.style.display = "none"; }, 300);
+    if (window.history.state && window.history.state.menu === "open") {
+        window.history.back();
+    }
 }
-
-// ... (나머지 로직 동일)
+// ... (하단 로직 동일)
