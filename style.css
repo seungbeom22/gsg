@@ -52,3 +52,7 @@ button { font-size: 24px; font-weight: bold; cursor: pointer; border-radius: 12p
 .operator { background-color: var(--main-theme); color: white; }
 .btn-red { background-color: #ff3b30; color: white; }
 .mem-btn { background-color: #555; color: white; font-size: 14px; }
+/* 검정색 버튼(배경색이 #000000인 버튼)의 글씨를 하얀색으로 강제 변경 */
+button[style*="background-color: #000000;"] {
+    color: #ffffff !important;
+}
