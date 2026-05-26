@@ -10,9 +10,7 @@ function formatNumber(num) {
     return parts.join(".");
 }
 
-function unformatNumber(num) { 
-    return num.toString().replace(/,/g, ""); 
-}
+function unformatNumber(num) { return num.toString().replace(/,/g, ""); }
 
 function updateMemIndicator() {
     memIndicator.innerText = memoryValue !== 0 ? `메모리(M): ${formatNumber(memoryValue)}` : "";
@@ -23,14 +21,8 @@ function memory(type) {
     switch(type) {
         case 'MC': memoryValue = 0; break;
         case 'MR': display.value = formatNumber(memoryValue); break;
-        case 'M+': 
-            memoryValue += currentVal; 
-            display.value = ''; 
-            break;
-        case 'M-': 
-            memoryValue -= currentVal; 
-            display.value = ''; 
-            break;
+        case 'M+': memoryValue += currentVal; display.value = ''; break;
+        case 'M-': memoryValue -= currentVal; display.value = ''; break;
     }
     updateMemIndicator();
 }
@@ -44,9 +36,7 @@ function appendToDisplay(value) {
     }
 }
 
-function clearDisplay() { 
-    display.value = ''; 
-}
+function clearDisplay() { display.value = ''; }
 
 function deleteLast() {
     let currentVal = unformatNumber(display.value);
@@ -61,9 +51,7 @@ function calculate() {
             let result = eval(expression);
             display.value = formatNumber(result);
         }
-    } catch (error) { 
-        display.value = '오류'; 
-    }
+    } catch (error) { display.value = '오류'; }
 }
 
 function changeTheme(color) {
