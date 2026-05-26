@@ -1,4 +1,3 @@
-
 const display = document.getElementById('display');
 const overlay = document.getElementById('overlay');
 const memIndicator = document.getElementById('memory-indicator');
@@ -92,5 +91,3 @@ window.onpopstate = function() {
         closeMenu();
     }
 };
-script.js
-script.js 항목을 표시하는 중입니다.
