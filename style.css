@@ -1,7 +1,20 @@
 :root { --main-theme: #ff9500; --text-color: #000; }
-body { display: flex; justify-content: center; align-items: center; height: 100vh; background: #f2f4f7; margin: 0; }
-.calculator { width: 350px; background: #fff; padding: 20px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 1; }
-#display { width: 100%; height: 60px; font-size: 30px; text-align: right; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 10px; padding: 10px; }
+body { 
+    display: flex; justify-content: center; align-items: center; 
+    height: 100vh; background: #f2f4f7; margin: 0; overflow: hidden; 
+}
+.calculator { 
+    width: 350px; background: #fff; padding: 20px; 
+    border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+    z-index: 1; max-height: 90vh; box-sizing: border-box;
+}
+.calc-header { 
+    display: flex; align-items: center; justify-content: center; 
+    position: relative; margin-bottom: 20px; font-weight: bold; font-size: 20px;
+}
+.hamburger { font-size: 30px; cursor: pointer; position: absolute; left: 0; }
+.title-text { display: flex; align-items: baseline; gap: 8px; }
+#display { width: 100%; height: 60px; font-size: 30px; text-align: right; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 10px; padding: 10px; box-sizing: border-box; }
 .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 button { height: 60px; border-radius: 15px; border: none; font-size: 18px; font-weight: bold; cursor: pointer; }
 .operator { background-color: var(--main-theme); color: var(--text-color); }
