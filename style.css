@@ -1,4 +1,4 @@
-:root { --main-theme: #ff9500; --text-color: #000; }
+:root { --main-theme: #ff9500; }
 
 body { 
     position: fixed; top: 0; left: 0; width: 100%; height: 100dvh; 
@@ -7,28 +7,38 @@ body {
     overflow: hidden !important; touch-action: none; 
 }
 
-/* 메뉴 애니메이션 */
+/* 메뉴 숨김 처리 및 스타일 */
 .side-menu {
     height: 100%; width: 0; position: fixed; z-index: 10; top: 0; left: 0;
-    background-color: #111; overflow-x: hidden;
-    transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    padding-top: 60px; box-sizing: border-box;
+    background-color: #111; overflow-x: hidden; padding-top: 60px;
 }
-
+.menu-content { padding: 20px; color: #fff; }
+.closebtn { position: absolute; top: 10px; right: 25px; font-size: 36px; color: #818181; text-decoration: none; }
+.theme-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
 #overlay {
     display: none; position: fixed; width: 100%; height: 100%;
-    top: 0; left: 0; background-color: rgba(0,0,0,0.5);
-    z-index: 5; opacity: 0; transition: opacity 0.3s ease;
+    top: 0; left: 0; background-color: rgba(0,0,0,0.5); z-index: 5;
 }
 
-/* 계산기 본체 */
 .calculator { 
     width: 320px; height: 90vh; background: #fff; padding: 20px; border-radius: 20px; 
     box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; flex-direction: column;
     overflow: hidden !important; box-sizing: border-box;
-    color: var(--text-color); /* 테마에 따라 변하는 글자색 */
 }
 
-/* ... (기존 calc-header, display, buttons 스타일 유지) ... */
-.operator { background-color: var(--main-theme); color: white; transition: background-color 0.3s; }
-/* ... (나머지 스타일 동일) ... */
+.calc-header { display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 15px; flex-shrink: 0; }
+.hamburger { position: absolute; left: 0; cursor: pointer; font-size: 32px; }
+.title-area { font-weight: bold; font-size: 18px; }
+
+#display { 
+    width: 100%; height: 60px; font-size: 30px; text-align: right; 
+    margin-bottom: 15px; border: 1px solid #ccc; border-radius: 12px;
+    flex-shrink: 0; box-sizing: border-box; padding-right: 10px;
+}
+
+.buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; flex-grow: 1; }
+button { font-size: 24px; font-weight: bold; cursor: pointer; border-radius: 12px; border: none; min-height: 0; }
+.operator { background-color: var(--main-theme); color: white; }
+.btn-equal { grid-column: span 2; }
+.btn-red { background-color: #ff3b30; color: white; }
+.mem-btn { background-color: #555; color: white; font-size: 14px; }
