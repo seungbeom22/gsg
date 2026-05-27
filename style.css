@@ -21,7 +21,8 @@ button { height: 60px; border-radius: 15px; border: none; font-size: 18px; font-
 .btn-ac { background-color: #ff3b30; color: #fff; }
 .btn-del { background-color: #ff9500; color: #fff; }
 .btn-equals { background-color: var(--main-theme); color: var(--text-color); }
-.side-menu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #111; overflow: hidden; transition: 0.3s; z-index: 9999; }
+.toast { height: 0; overflow: hidden; text-align: center; font-size: 14px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.7); border-radius: 10px; transition: height 0.2s, padding 0.2s, opacity 0.3s; opacity: 0; }
+.toast.show { height: auto; padding: 8px; opacity: 1; margin-bottom: 8px; } height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #111; overflow: hidden; transition: 0.3s; z-index: 9999; }
 .closebtn { position: absolute; top: 10px; right: 25px; color: #ff3b30; font-size: 40px; cursor: pointer; }
 .menu-content { padding: 20px; color: #fff; margin-top: 50px; }
 .theme-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }

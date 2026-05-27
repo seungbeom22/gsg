@@ -42,11 +42,19 @@ function calculate() {
     }
 }
 
+function showToast(msg) {
+    let t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => t.classList.remove('show'), 1500);
+}
+
 function memory(type) {
     let d = document.getElementById('display');
     let v = parseFloat(d.value) || 0;
-    if (type === 'M+') memoryValue += v;
-    else if (type === 'M-') memoryValue -= v;
-    else if (type === 'MR') d.value = memoryValue;
-    else if (type === 'MC') memoryValue = 0;
+    if (type === 'M+') { memoryValue += v; showToast('M+ : ' + memoryValue); }
+    else if (type === 'M-') { memoryValue -= v; showToast('M- : ' + memoryValue); }
+    else if (type === 'MR') { d.value = memoryValue; showToast('MR : ' + memoryValue); }
+    else if (type === 'MC') { memoryValue = 0; showToast('메모리 초기화'); }
 }
