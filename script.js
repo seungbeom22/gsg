@@ -10,7 +10,7 @@ function changeTheme(color) {
 function appendToDisplay(val) { let d = document.getElementById('display'); if(d.value === '0') d.value = val; else d.value += val; }
 function clearDisplay() { document.getElementById('display').value = '0'; }
 function calculate() { try { document.getElementById('display').value = eval(document.getElementById('display').value.replace(/×/g, '*').replace(/÷/g, '/')); } catch { document.getElementById('display').value = '오류'; } }
-function memory(type) {
+function deleteLast() { let d = document.getElementById('display'); if(d.value.length <= 1) d.value = '0'; else d.value = d.value.slice(0, -1); }
     let d = document.getElementById('display');
     let v = parseFloat(d.value) || 0;
     if(type === 'M+') memoryValue += v;
