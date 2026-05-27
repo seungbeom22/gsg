@@ -19,7 +19,8 @@ body {
 button { height: 60px; border-radius: 15px; border: none; font-size: 18px; font-weight: bold; cursor: pointer; }
 .operator { background-color: var(--main-theme); color: var(--text-color); }
 .btn-ac { background-color: #ff3b30; color: #fff; }
-.side-menu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #111; overflow: hidden; transition: 0.3s; z-index: 9999; visibility: hidden; }
+.side-menu { height: 100%; width: 0; position: fixed; top: 0; left: 0; background: #111; overflow: hidden; transition: 0.3s; z-index: 9999; visibility: hidden; pointer-events: none; }
+.side-menu.open { pointer-events: auto; }
 .closebtn { position: absolute; top: 10px; right: 25px; color: #ff3b30; font-size: 40px; cursor: pointer; }
 .menu-content { padding: 20px; color: #fff; margin-top: 50px; }
 .btn-del { background-color: #ff9500; color: #fff; }

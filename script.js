@@ -1,6 +1,6 @@
 let memoryValue = 0;
-function openMenu() { document.getElementById("mySidenav").style.visibility = "visible"; document.getElementById("mySidenav").style.width = "250px"; }
-function closeMenu() { document.getElementById("mySidenav").style.width = "0"; setTimeout(() => { document.getElementById("mySidenav").style.visibility = "hidden"; }, 300); }
+function openMenu() { let m = document.getElementById("mySidenav"); m.style.visibility = "visible"; m.style.width = "250px"; m.classList.add("open"); }
+function closeMenu() { let m = document.getElementById("mySidenav"); m.style.width = "0"; m.classList.remove("open"); setTimeout(() => { m.style.visibility = "hidden"; }, 300); }
 function changeTheme(color) {
     document.documentElement.style.setProperty('--main-theme', color);
     const textColor = (color === '#000000') ? '#ffffff' : '#000000';
@@ -11,6 +11,7 @@ function appendToDisplay(val) { let d = document.getElementById('display'); if(d
 function clearDisplay() { document.getElementById('display').value = '0'; }
 function calculate() { try { document.getElementById('display').value = eval(document.getElementById('display').value.replace(/×/g, '*').replace(/÷/g, '/')); } catch { document.getElementById('display').value = '오류'; } }
 function deleteLast() { let d = document.getElementById('display'); if(d.value.length <= 1) d.value = '0'; else d.value = d.value.slice(0, -1); }
+function memory(type) {
     let d = document.getElementById('display');
     let v = parseFloat(d.value) || 0;
     if(type === 'M+') memoryValue += v;
