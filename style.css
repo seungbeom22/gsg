@@ -1,6 +1,6 @@
 :root { --main-theme: #ff9500; --text-color: #000; }
 body { 
-    display: flex; justify-content: center; align-items: center; 
+    display: flex; justify-content: center; align-items: flex-start; padding-top: 30px;
     height: 100vh; background: #f2f4f7; margin: 0; overflow: hidden; 
 }
 .calculator { 
