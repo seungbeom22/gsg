@@ -1,14 +1,21 @@
 let memoryValue = 0;
 
 function openMenu() {
-    let m = document.getElementById("mySidenav");
-    m.style.width = "250px";
+    document.getElementById("mySidenav").classList.add("open");
+    document.getElementById("overlay").classList.add("show");
+    history.pushState({ menuOpen: true }, '');
 }
 
 function closeMenu() {
-    let m = document.getElementById("mySidenav");
-    m.style.width = "0";
+    document.getElementById("mySidenav").classList.remove("open");
+    document.getElementById("overlay").classList.remove("show");
 }
+
+window.addEventListener('popstate', function() {
+    if (document.getElementById("mySidenav").classList.contains("open")) {
+        closeMenu();
+    }
+});
 
 function changeTheme(color) {
     document.documentElement.style.setProperty('--main-theme', color);
