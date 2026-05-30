@@ -64,13 +64,11 @@
             <button onclick="appendToDisplay('1')">1</button>
             <button onclick="appendToDisplay('2')">2</button>
             <button onclick="appendToDisplay('3')">3</button>
-
-            <!-- = 버튼: 마지막 두 행의 4번째 열 차지 (grid-row span 2) -->
-            <button class="operator btn-equals" onclick="calculate()" style="grid-row: span 2;">=</button>
-
-            <!-- 마지막 행: 0(2칸), . -->
-            <button onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
             <button onclick="appendToDisplay('.')">.</button>
+
+            <!-- 마지막 행: 0(2칸), =(2칸) -->
+            <button onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
+            <button class="operator btn-equals" onclick="calculate()" style="grid-column: span 2;">=</button>
         </div>
     </div>
     <script src="script.js"></script>
