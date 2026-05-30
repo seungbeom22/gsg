@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Calculator</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -18,59 +18,68 @@
             </div>
             <h3>테마 설정</h3>
             <div class="theme-buttons">
-                <button onclick="changeTheme('#FF3B30')" style="background:#FF3B30; color:#fff;">빨강</button>
-                <button onclick="changeTheme('#FF9500')" style="background:#FF9500; color:#fff;">주황</button>
-                <button onclick="changeTheme('#FFCC00')" style="background:#FFCC00; color:#000;">노랑</button>
-                <button onclick="changeTheme('#4CD964')" style="background:#4CD964; color:#000;">초록</button>
-                <button onclick="changeTheme('#007AFF')" style="background:#007AFF; color:#fff;">파랑</button>
-                <button onclick="changeTheme('#5AC8FA')" style="background:#5AC8FA; color:#000;">하늘</button>
-                <button onclick="changeTheme('#8E8E93')" style="background:#8E8E93; color:#fff;">회색</button>
-                <button onclick="changeTheme('#000000')" style="background:#000000; color:#fff;">검정</button>
+                <button onclick="changeTheme('#FF3B30')" style="background:#FF3B30;color:#fff;">빨강</button>
+                <button onclick="changeTheme('#FF9500')" style="background:#FF9500;color:#fff;">주황</button>
+                <button onclick="changeTheme('#FFCC00')" style="background:#FFCC00;color:#000;">노랑</button>
+                <button onclick="changeTheme('#4CD964')" style="background:#4CD964;color:#000;">초록</button>
+                <button onclick="changeTheme('#007AFF')" style="background:#007AFF;color:#fff;">파랑</button>
+                <button onclick="changeTheme('#5AC8FA')" style="background:#5AC8FA;color:#000;">하늘</button>
+                <button onclick="changeTheme('#8E8E93')" style="background:#8E8E93;color:#fff;">회색</button>
+                <button onclick="changeTheme('#000000')" style="background:#000000;color:#fff;">검정</button>
             </div>
         </div>
     </div>
 
-    <!-- 메모리 뱃지: 계산기 오른쪽에 플로팅 -->
-    <div id="memory-badge" class="memory-badge"></div>
+    <div class="layout">
+        <!-- 계산기 -->
+        <div class="calculator">
+            <div class="calc-header">
+                <span class="hamburger" onclick="openMenu()">&#9776;</span>
+                <span class="title-text">계산기 <small>v2.0</small></span>
+            </div>
+            <div id="toast" class="toast"></div>
+            <input type="text" id="display" value="0" readonly>
+            <div class="buttons">
+                <button onclick="memory('MC')">MC</button>
+                <button onclick="memory('MR')">MR</button>
+                <button onclick="memory('M+')">M+</button>
+                <button onclick="memory('M-')">M-</button>
 
-    <div class="calculator">
-        <div class="calc-header">
-            <span class="hamburger" onclick="openMenu()">&#9776;</span>
-            <span class="title-text">계산기 <small>v1.9</small></span>
+                <button class="btn-ac" onclick="clearDisplay()">AC</button>
+                <button class="btn-del" onclick="deleteLast()">⌫</button>
+                <button class="operator" onclick="appendToDisplay('/')">÷</button>
+                <button class="operator" onclick="appendToDisplay('*')">×</button>
+
+                <button onclick="appendToDisplay('7')">7</button>
+                <button onclick="appendToDisplay('8')">8</button>
+                <button onclick="appendToDisplay('9')">9</button>
+                <button class="operator" onclick="appendToDisplay('-')">-</button>
+
+                <button onclick="appendToDisplay('4')">4</button>
+                <button onclick="appendToDisplay('5')">5</button>
+                <button onclick="appendToDisplay('6')">6</button>
+                <button class="operator" onclick="appendToDisplay('+')">+</button>
+
+                <button onclick="appendToDisplay('1')">1</button>
+                <button onclick="appendToDisplay('2')">2</button>
+                <button onclick="appendToDisplay('3')">3</button>
+                <button onclick="appendToDisplay('.')">.</button>
+
+                <button onclick="appendToDisplay('0')" style="grid-column:span 2;">0</button>
+                <button class="operator btn-equals" onclick="calculate()" style="grid-column:span 2;">=</button>
+            </div>
         </div>
-        <div id="toast" class="toast"></div>
-        <input type="text" id="display" value="0" readonly>
-        <div class="buttons">
-            <button onclick="memory('MC')">MC</button>
-            <button onclick="memory('MR')">MR</button>
-            <button onclick="memory('M+')">M+</button>
-            <button onclick="memory('M-')">M-</button>
 
-            <button class="btn-ac" onclick="clearDisplay()">AC</button>
-            <button class="btn-del" onclick="deleteLast()">⌫</button>
-            <button class="operator" onclick="appendToDisplay('/')">÷</button>
-            <button class="operator" onclick="appendToDisplay('*')">×</button>
-
-            <button onclick="appendToDisplay('7')">7</button>
-            <button onclick="appendToDisplay('8')">8</button>
-            <button onclick="appendToDisplay('9')">9</button>
-            <button class="operator" onclick="appendToDisplay('-')">-</button>
-
-            <button onclick="appendToDisplay('4')">4</button>
-            <button onclick="appendToDisplay('5')">5</button>
-            <button onclick="appendToDisplay('6')">6</button>
-            <button class="operator" onclick="appendToDisplay('+')">+</button>
-
-            <button onclick="appendToDisplay('1')">1</button>
-            <button onclick="appendToDisplay('2')">2</button>
-            <button onclick="appendToDisplay('3')">3</button>
-            <button onclick="appendToDisplay('.')">.</button>
-
-            <!-- 마지막 행: 0(2칸), =(2칸) -->
-            <button onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
-            <button class="operator btn-equals" onclick="calculate()" style="grid-column: span 2;">=</button>
+        <!-- 오른쪽 메모리 히스토리 패널 -->
+        <div class="memory-panel">
+            <div class="memory-panel-title">메모리</div>
+            <div class="mem-total" id="mem-total">
+                <span>합계</span>0
+            </div>
+            <div class="mem-history" id="mem-history"></div>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
