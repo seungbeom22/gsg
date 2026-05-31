@@ -1,6 +1,6 @@
 let memoryValue = 0;
 let freshInput = false;
-let memHistory = []; // { op, inputVal, total }
+let memHistory = []; // { op, val, total }
 
 function openMenu() {
     document.getElementById("mySidenav").classList.add("open");
@@ -99,23 +99,20 @@ function showToast(msg) {
     window._toastTimer = setTimeout(() => t.classList.remove('show'), 1500);
 }
 
-// 메모리 히스토리 패널 업데이트
-function updateMemoryPanel() {
-    // 합계 업데이트
-    document.getElementById('mem-total').innerHTML =
-        '<span>합계</span>' + formatDisplay(memoryValue);
-
-    // 기록 목록 (최신순, 최대 20개)
-    let hist = document.getElementById('mem-history');
-    hist.innerHTML = '';
-    let entries = memHistory.slice().reverse().slice(0, 20);
-    entries.forEach(function(e) {
+// ── 디스플레이 위 오른쪽 메모리 기록 업데이트 ──
+function updateMemLog() {
+    let log = document.getElementById('mem-log');
+    log.innerHTML = '';
+    // 최신 3개만 표시 (가장 최신이 맨 아래)
+    let recent = memHistory.slice(-3);
+    recent.forEach(function(e) {
         let el = document.createElement('div');
-        el.className = 'mem-entry';
+        el.className = 'mem-log-item';
         el.innerHTML =
-            '<span class="op">' + e.op + ' ' + formatDisplay(e.val) + '</span><br>' +
-            '<span class="val">= ' + formatDisplay(e.total) + '</span>';
-        hist.appendChild(el);
+            '<span class="log-op">' + e.op + '</span>' +
+            formatDisplay(e.val) +
+            '<span class="log-total"> = ' + formatDisplay(e.total) + '</span>';
+        log.appendChild(el);
     });
 }
 
@@ -128,12 +125,12 @@ function memory(type) {
         memoryValue += v;
         memHistory.push({ op: 'M+', val: v, total: memoryValue });
         freshInput = true;
-        updateMemoryPanel();
+        updateMemLog();
     } else if (type === 'M-') {
         memoryValue -= v;
         memHistory.push({ op: 'M−', val: v, total: memoryValue });
         freshInput = true;
-        updateMemoryPanel();
+        updateMemLog();
     } else if (type === 'MR') {
         d.dataset.raw = String(memoryValue);
         d.value = formatDisplay(memoryValue);
@@ -142,7 +139,7 @@ function memory(type) {
     } else if (type === 'MC') {
         memoryValue = 0;
         memHistory = [];
-        updateMemoryPanel();
+        updateMemLog();
         showToast('메모리 초기화');
     }
 }

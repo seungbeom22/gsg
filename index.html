@@ -31,21 +31,25 @@
     </div>
 
     <div class="layout">
-        <!-- 계산기 -->
         <div class="calculator">
             <div class="calc-header">
                 <span class="hamburger" onclick="openMenu()">&#9776;</span>
                 <span class="title-text">계산기 <small>v2.0</small></span>
             </div>
             <div id="toast" class="toast"></div>
-            <div class="mem-bar">
-                <button class="mem-btn" onclick="memory('MC')">MC</button>
-                <button class="mem-btn" onclick="memory('MR')">MR</button>
-                <button class="mem-btn" onclick="memory('M+')">M+</button>
-                <button class="mem-btn" onclick="memory('M-')">M−</button>
+
+            <!-- 디스플레이 + 오른쪽 메모리 기록 -->
+            <div class="display-wrap">
+                <input type="text" id="display" value="0" readonly>
+                <div class="mem-log" id="mem-log"></div>
             </div>
-            <input type="text" id="display" value="0" readonly>
+
             <div class="buttons">
+                <button onclick="memory('MC')">MC</button>
+                <button onclick="memory('MR')">MR</button>
+                <button onclick="memory('M+')">M+</button>
+                <button onclick="memory('M-')">M-</button>
+
                 <button class="btn-ac" onclick="clearDisplay()">AC</button>
                 <button class="btn-del" onclick="deleteLast()">⌫</button>
                 <button class="operator" onclick="appendToDisplay('/')">÷</button>
@@ -69,15 +73,6 @@
                 <button onclick="appendToDisplay('0')" style="grid-column:span 2;">0</button>
                 <button class="operator btn-equals" onclick="calculate()" style="grid-column:span 2;">=</button>
             </div>
-        </div>
-
-        <!-- 오른쪽 메모리 히스토리 패널 -->
-        <div class="memory-panel">
-            <div class="memory-panel-title">메모리</div>
-            <div class="mem-total" id="mem-total">
-                <span>합계</span>0
-            </div>
-            <div class="mem-history" id="mem-history"></div>
         </div>
     </div>
 
