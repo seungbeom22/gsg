@@ -38,13 +38,14 @@
                 <span class="title-text">계산기 <small>v2.0</small></span>
             </div>
             <div id="toast" class="toast"></div>
+            <div class="mem-bar">
+                <button class="mem-btn" onclick="memory('MC')">MC</button>
+                <button class="mem-btn" onclick="memory('MR')">MR</button>
+                <button class="mem-btn" onclick="memory('M+')">M+</button>
+                <button class="mem-btn" onclick="memory('M-')">M−</button>
+            </div>
             <input type="text" id="display" value="0" readonly>
             <div class="buttons">
-                <button onclick="memory('MC')">MC</button>
-                <button onclick="memory('MR')">MR</button>
-                <button onclick="memory('M+')">M+</button>
-                <button onclick="memory('M-')">M-</button>
-
                 <button class="btn-ac" onclick="clearDisplay()">AC</button>
                 <button class="btn-del" onclick="deleteLast()">⌫</button>
                 <button class="operator" onclick="appendToDisplay('/')">÷</button>

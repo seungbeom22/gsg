@@ -42,6 +42,28 @@ html, body {
 .hamburger { font-size: 26px; cursor: pointer; position: absolute; left: 0; z-index: 2; }
 .title-text { display: flex; align-items: baseline; gap: 6px; }
 
+/* 메모리 버튼 바 — 디스플레이 바로 위 */
+.mem-bar {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+.mem-btn {
+    flex: 1;
+    height: 26px !important;
+    border-radius: 7px !important;
+    border: 1.5px solid #ddd !important;
+    background: #f5f5f5 !important;
+    color: var(--main-theme) !important;
+    font-size: 11px !important;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.15s, opacity 0.1s;
+    padding: 0;
+}
+.mem-btn:active { opacity: 0.6; }
+.mem-btn:hover  { background: #ebebeb !important; }
+
 #display {
     width: 100%; height: 54px; font-size: 26px; text-align: right;
     margin-bottom: 12px; border: 2px solid #ddd; border-radius: 10px;
