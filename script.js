@@ -1,21 +1,131 @@
-// script.js
 let memoryValue = 0;
 let freshInput = false;
+let memHistory = []; 
 
-// ... (상단 함수들 유지) ...
+function openMenu() {
+    document.getElementById("mySidenav").classList.add("open");
+    document.getElementById("overlay").classList.add("show");
+    history.pushState({ menuOpen: true }, '');
+}
+function closeMenu() {
+    document.getElementById("mySidenav").classList.remove("open");
+    document.getElementById("overlay").classList.remove("show");
+}
+window.addEventListener('popstate', function() {
+    if (document.getElementById("mySidenav").classList.contains("open")) closeMenu();
+});
 
-// ── 메모리 합계 표시 업데이트 ──
+function changeTheme(color) {
+    document.documentElement.style.setProperty('--main-theme', color);
+    document.documentElement.style.setProperty('--text-color', color === '#000000' ? '#ffffff' : '#000000');
+    closeMenu();
+}
+
+function formatDisplay(val) {
+    if (val === '' || val === '오류') return val;
+    let parts = String(val).split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts.join('.');
+}
+
+function formatRawExpression(expr) {
+    return expr.replace(/(\d+\.?\d*)/g, function(num) {
+        let parts = num.split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return parts.join('.');
+    });
+}
+
+function getRaw() {
+    let d = document.getElementById('display');
+    return d.dataset.raw !== undefined ? d.dataset.raw : d.value.replace(/,/g, '');
+}
+
+function appendToDisplay(val) {
+    let d = document.getElementById('display');
+    let raw = getRaw();
+    if (freshInput) {
+        if (['+', '-', '*', '/'].includes(val)) {
+            freshInput = false;
+        } else {
+            raw = '';
+            freshInput = false;
+        }
+    }
+    if (raw === '0' || raw === '') {
+        raw = ['+', '-', '*', '/'].includes(val) ? '0' + val : val;
+    } else {
+        raw += val;
+    }
+    d.dataset.raw = raw;
+    d.value = formatRawExpression(raw);
+}
+
+function clearDisplay() {
+    let d = document.getElementById('display');
+    d.dataset.raw = '0';
+    d.value = '0';
+    freshInput = false;
+}
+
+function deleteLast() {
+    let d = document.getElementById('display');
+    let raw = getRaw();
+    raw = raw.length <= 1 ? '0' : raw.slice(0, -1);
+    d.dataset.raw = raw;
+    d.value = formatRawExpression(raw);
+}
+
+function calculate() {
+    try {
+        let d = document.getElementById('display');
+        let raw = getRaw();
+        let result = eval(raw.replace(/×/g, '*').replace(/÷/g, '/'));
+        d.dataset.raw = String(result);
+        d.value = formatDisplay(result);
+        freshInput = true;
+    } catch {
+        let d = document.getElementById('display');
+        d.dataset.raw = '오류';
+        d.value = '오류';
+    }
+}
+
+function showToast(msg) {
+    let t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => t.classList.remove('show'), 1500);
+}
+
 function updateMemLog() {
     let panel = document.getElementById('mem-panel');
+    let histEl = document.getElementById('mem-history');
     let totalVal = document.getElementById('mem-total-value');
 
-    // 메모리 값이 0이면 패널을 숨기고, 값이 있으면 표시
-    if (memoryValue === 0) {
+    if (memHistory.length === 0) {
         panel.style.display = 'none';
-    } else {
-        panel.style.display = 'block';
-        totalVal.textContent = formatDisplay(memoryValue);
+        return;
     }
+
+    panel.style.display = 'block';
+    totalVal.textContent = formatDisplay(memoryValue);
+
+    histEl.innerHTML = '';
+    // 최신 기록이 아래로 가도록 수정 (사용자 보기 편하게)
+    memHistory.forEach(function(e) {
+        let el = document.createElement('div');
+        el.className = 'mem-history-item';
+        el.innerHTML =
+            '<span class="log-op">' + e.op + '</span>' +
+            '<span class="log-val">' + formatDisplay(e.val) + '</span>' +
+            '<span class="log-arrow">→</span>' +
+            '<span class="log-total">' + formatDisplay(e.total) + '</span>';
+        histEl.appendChild(el);
+    });
+    // 스크롤을 항상 아래로 유지
+    histEl.scrollTop = histEl.scrollHeight;
 }
 
 function memory(type) {
@@ -25,19 +135,22 @@ function memory(type) {
 
     if (type === 'M+') {
         memoryValue += v;
+        memHistory.push({ op: 'M+', val: v, total: memoryValue });
         freshInput = true;
         updateMemLog();
     } else if (type === 'M-') {
         memoryValue -= v;
+        memHistory.push({ op: 'M−', val: v, total: memoryValue });
         freshInput = true;
         updateMemLog();
     } else if (type === 'MR') {
         d.dataset.raw = String(memoryValue);
         d.value = formatDisplay(memoryValue);
-        showToast('MR : ' + formatDisplay(memoryValue));
+        showToast('메모리 불러오기');
         freshInput = true;
     } else if (type === 'MC') {
         memoryValue = 0;
+        memHistory = [];
         updateMemLog();
         showToast('메모리 초기화');
     }
