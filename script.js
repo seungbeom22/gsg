@@ -1,14 +1,15 @@
+// script.js
 let memoryValue = 0;
 let freshInput = false;
 
-// ... 다른 함수들은 그대로 유지 ...
+// ... (상단 함수들 유지) ...
 
-// ── 메모리 기록 패널 업데이트 (총합만 표시) ──
+// ── 메모리 합계 표시 업데이트 ──
 function updateMemLog() {
     let panel = document.getElementById('mem-panel');
     let totalVal = document.getElementById('mem-total-value');
 
-    // 메모리 값이 0이면 패널 숨김, 아니면 표시
+    // 메모리 값이 0이면 패널을 숨기고, 값이 있으면 표시
     if (memoryValue === 0) {
         panel.style.display = 'none';
     } else {
