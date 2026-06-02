@@ -38,10 +38,18 @@
             </div>
             <div id="toast" class="toast"></div>
 
-            <!-- 디스플레이 + 오른쪽 메모리 기록 -->
+            <!-- 메모리 기록 패널 (디스플레이 위) -->
+            <div class="mem-panel" id="mem-panel" style="display:none;">
+                <div class="mem-total-bar" id="mem-total-bar">
+                    <span class="mem-total-label">합계</span>
+                    <span class="mem-total-value" id="mem-total-value">0</span>
+                </div>
+                <div class="mem-history" id="mem-history"></div>
+            </div>
+
+            <!-- 디스플레이 -->
             <div class="display-wrap">
                 <input type="text" id="display" value="0" readonly>
-                <div class="mem-log" id="mem-log"></div>
             </div>
 
             <div class="buttons">

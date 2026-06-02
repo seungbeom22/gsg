@@ -99,20 +99,34 @@ function showToast(msg) {
     window._toastTimer = setTimeout(() => t.classList.remove('show'), 1500);
 }
 
-// ── 디스플레이 위 오른쪽 메모리 기록 업데이트 ──
+// ── 메모리 기록 패널 업데이트 ──
 function updateMemLog() {
-    let log = document.getElementById('mem-log');
-    log.innerHTML = '';
-    // 최신 3개만 표시 (가장 최신이 맨 아래)
-    let recent = memHistory.slice(-3);
-    recent.forEach(function(e) {
+    let panel = document.getElementById('mem-panel');
+    let histEl = document.getElementById('mem-history');
+    let totalVal = document.getElementById('mem-total-value');
+
+    if (memHistory.length === 0) {
+        panel.style.display = 'none';
+        return;
+    }
+
+    panel.style.display = 'block';
+
+    // 누적 합계 표시
+    totalVal.textContent = formatDisplay(memoryValue);
+
+    // 전체 기록 렌더링 (최신이 맨 위)
+    histEl.innerHTML = '';
+    let reversed = memHistory.slice().reverse();
+    reversed.forEach(function(e, i) {
         let el = document.createElement('div');
-        el.className = 'mem-log-item';
+        el.className = 'mem-history-item' + (i === 0 ? ' latest' : '');
         el.innerHTML =
             '<span class="log-op">' + e.op + '</span>' +
-            formatDisplay(e.val) +
-            '<span class="log-total"> = ' + formatDisplay(e.total) + '</span>';
-        log.appendChild(el);
+            '<span class="log-val">' + formatDisplay(e.val) + '</span>' +
+            '<span class="log-arrow">→</span>' +
+            '<span class="log-total">' + formatDisplay(e.total) + '</span>';
+        histEl.appendChild(el);
     });
 }
 
