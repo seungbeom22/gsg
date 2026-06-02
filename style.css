@@ -39,6 +39,7 @@ html, body {
 .hamburger { font-size: 26px; cursor: pointer; position: absolute; left: 0; z-index: 2; }
 .title-text { display: flex; align-items: baseline; gap: 6px; }
 
+/* ── 디스플레이 래퍼 ── */
 .display-wrap {
     margin-bottom: 12px;
 }
@@ -55,7 +56,6 @@ html, body {
     border: 2px solid #ddd;
     border-radius: 10px;
     margin-bottom: 10px;
-    overflow: hidden;
 }
 
 .mem-total-bar {
@@ -64,23 +64,14 @@ html, body {
     align-items: center;
     background: var(--main-theme);
     color: var(--text-color);
-    padding: 6px 12px;
-    font-size: 13px;
+    padding: 8px 12px;
+    font-size: 14px;
     font-weight: bold;
 }
 
-.mem-total-label {
-    opacity: 0.85;
-    font-size: 11px;
-    letter-spacing: 0.5px;
-}
-
-.mem-total-value {
-    font-size: 16px;
-}
-
+/* 기록 리스트 영역 숨김 */
 .mem-history {
-    display: none; /* 기록 리스트 숨김 */
+    display: none;
 }
 
 .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
