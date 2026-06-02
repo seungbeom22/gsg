@@ -1,6 +1,6 @@
 let memoryValue = 0;
 let freshInput = false;
-let memHistory = []; 
+let memHistory = [];
 
 function openMenu() {
     document.getElementById("mySidenav").classList.add("open");
@@ -102,13 +102,23 @@ function showToast(msg) {
 function updateMemLog() {
     let panel = document.getElementById('mem-panel');
     let totalVal = document.getElementById('mem-total-value');
-    
-    if (memoryValue === 0) {
+    let histEl = document.getElementById('mem-history');
+
+    if (memoryValue === 0 && memHistory.length === 0) {
         panel.style.display = 'none';
-    } else {
-        panel.style.display = 'block';
-        totalVal.textContent = formatDisplay(memoryValue);
+        return;
     }
+    panel.style.display = 'block';
+    totalVal.textContent = formatDisplay(memoryValue);
+
+    histEl.innerHTML = '';
+    let reversed = memHistory.slice().reverse();
+    reversed.forEach(function(e, i) {
+        let el = document.createElement('div');
+        el.className = 'mem-history-item' + (i === 0 ? ' latest' : '');
+        el.innerHTML = '<span class="log-op">' + e.op + '</span>' + '<span class="log-val">' + formatDisplay(e.val) + '</span>' + '<span class="log-arrow">→</span>' + '<span class="log-total">' + formatDisplay(e.total) + '</span>';
+        histEl.appendChild(el);
+    });
 }
 
 function memory(type) {
@@ -118,12 +128,14 @@ function memory(type) {
 
     if (type === 'M+') {
         memoryValue += v;
-        updateMemLog();
+        memHistory.push({ op: 'M+', val: v, total: memoryValue });
         freshInput = true;
+        updateMemLog();
     } else if (type === 'M-') {
         memoryValue -= v;
-        updateMemLog();
+        memHistory.push({ op: 'M−', val: v, total: memoryValue });
         freshInput = true;
+        updateMemLog();
     } else if (type === 'MR') {
         d.dataset.raw = String(memoryValue);
         d.value = formatDisplay(memoryValue);
@@ -131,6 +143,7 @@ function memory(type) {
         freshInput = true;
     } else if (type === 'MC') {
         memoryValue = 0;
+        memHistory = [];
         updateMemLog();
         showToast('메모리 초기화');
     }
