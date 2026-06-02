@@ -101,31 +101,14 @@ function showToast(msg) {
 
 function updateMemLog() {
     let panel = document.getElementById('mem-panel');
-    let histEl = document.getElementById('mem-history');
     let totalVal = document.getElementById('mem-total-value');
-
-    if (memHistory.length === 0) {
+    
+    if (memoryValue === 0) {
         panel.style.display = 'none';
-        return;
+    } else {
+        panel.style.display = 'block';
+        totalVal.textContent = formatDisplay(memoryValue);
     }
-
-    panel.style.display = 'block';
-    totalVal.textContent = formatDisplay(memoryValue);
-
-    histEl.innerHTML = '';
-    // 최신 기록이 아래로 가도록 수정 (사용자 보기 편하게)
-    memHistory.forEach(function(e) {
-        let el = document.createElement('div');
-        el.className = 'mem-history-item';
-        el.innerHTML =
-            '<span class="log-op">' + e.op + '</span>' +
-            '<span class="log-val">' + formatDisplay(e.val) + '</span>' +
-            '<span class="log-arrow">→</span>' +
-            '<span class="log-total">' + formatDisplay(e.total) + '</span>';
-        histEl.appendChild(el);
-    });
-    // 스크롤을 항상 아래로 유지
-    histEl.scrollTop = histEl.scrollHeight;
 }
 
 function memory(type) {
@@ -135,22 +118,19 @@ function memory(type) {
 
     if (type === 'M+') {
         memoryValue += v;
-        memHistory.push({ op: 'M+', val: v, total: memoryValue });
-        freshInput = true;
         updateMemLog();
+        freshInput = true;
     } else if (type === 'M-') {
         memoryValue -= v;
-        memHistory.push({ op: 'M−', val: v, total: memoryValue });
-        freshInput = true;
         updateMemLog();
+        freshInput = true;
     } else if (type === 'MR') {
         d.dataset.raw = String(memoryValue);
         d.value = formatDisplay(memoryValue);
-        showToast('메모리 불러오기');
+        showToast('MR : ' + formatDisplay(memoryValue));
         freshInput = true;
     } else if (type === 'MC') {
         memoryValue = 0;
-        memHistory = [];
         updateMemLog();
         showToast('메모리 초기화');
     }
