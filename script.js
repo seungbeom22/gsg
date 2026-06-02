@@ -1,6 +1,6 @@
 let memoryValue = 0;
 let freshInput = false;
-let memHistory = []; // { op, val, total }
+let memHistory = []; 
 
 function openMenu() {
     document.getElementById("mySidenav").classList.add("open");
@@ -99,7 +99,6 @@ function showToast(msg) {
     window._toastTimer = setTimeout(() => t.classList.remove('show'), 1500);
 }
 
-// ── 메모리 기록 패널 업데이트 ──
 function updateMemLog() {
     let panel = document.getElementById('mem-panel');
     let histEl = document.getElementById('mem-history');
@@ -111,16 +110,13 @@ function updateMemLog() {
     }
 
     panel.style.display = 'block';
-
-    // 누적 합계 표시
     totalVal.textContent = formatDisplay(memoryValue);
 
-    // 전체 기록 렌더링 (최신이 맨 위)
     histEl.innerHTML = '';
-    let reversed = memHistory.slice().reverse();
-    reversed.forEach(function(e, i) {
+    // 최신 기록이 아래로 가도록 수정 (사용자 보기 편하게)
+    memHistory.forEach(function(e) {
         let el = document.createElement('div');
-        el.className = 'mem-history-item' + (i === 0 ? ' latest' : '');
+        el.className = 'mem-history-item';
         el.innerHTML =
             '<span class="log-op">' + e.op + '</span>' +
             '<span class="log-val">' + formatDisplay(e.val) + '</span>' +
@@ -128,6 +124,8 @@ function updateMemLog() {
             '<span class="log-total">' + formatDisplay(e.total) + '</span>';
         histEl.appendChild(el);
     });
+    // 스크롤을 항상 아래로 유지
+    histEl.scrollTop = histEl.scrollHeight;
 }
 
 function memory(type) {
@@ -148,7 +146,7 @@ function memory(type) {
     } else if (type === 'MR') {
         d.dataset.raw = String(memoryValue);
         d.value = formatDisplay(memoryValue);
-        showToast('MR : ' + formatDisplay(memoryValue));
+        showToast('메모리 불러오기');
         freshInput = true;
     } else if (type === 'MC') {
         memoryValue = 0;
