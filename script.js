@@ -44,16 +44,31 @@ function getRaw() {
 function appendToDisplay(val) {
     let d = document.getElementById('display');
     let raw = getRaw();
+    const operators = ['+', '-', '*', '/'];
+    const isOp = operators.includes(val);
+
     if (freshInput) {
-        if (['+', '-', '*', '/'].includes(val)) {
+        if (isOp) {
             freshInput = false;
         } else {
             raw = '';
             freshInput = false;
         }
     }
+
+    // 연산자 연속 입력 시 마지막 연산자로 교체
+    if (isOp && raw !== '' && raw !== '0') {
+        const lastChar = raw.slice(-1);
+        if (operators.includes(lastChar)) {
+            raw = raw.slice(0, -1) + val;
+            d.dataset.raw = raw;
+            d.value = formatRawExpression(raw);
+            return;
+        }
+    }
+
     if (raw === '0' || raw === '') {
-        raw = ['+', '-', '*', '/'].includes(val) ? '0' + val : val;
+        raw = isOp ? '0' + val : val;
     } else {
         raw += val;
     }
@@ -84,6 +99,8 @@ function calculate() {
         d.dataset.raw = String(result);
         d.value = formatDisplay(result);
         freshInput = true;
+        // 계산 후 히스토리 스택 초기화 (뒤로가기 한번에 나가도록)
+        history.replaceState(null, '');
     } catch {
         let d = document.getElementById('display');
         d.dataset.raw = '오류';

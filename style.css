@@ -24,9 +24,9 @@ html, body {
 }
 
 .calculator {
-    width: 320px;
+    width: 360px;
     background: #fff;
-    padding: 16px;
+    padding: 18px;
     border-radius: 28px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.12);
     flex-shrink: 0;
@@ -34,20 +34,19 @@ html, body {
 
 .calc-header {
     display: flex; align-items: center; justify-content: center;
-    position: relative; margin-bottom: 14px; font-weight: bold; font-size: 18px;
+    position: relative; margin-bottom: 14px; font-weight: bold; font-size: 20px;
 }
-.hamburger { font-size: 26px; cursor: pointer; position: absolute; left: 0; z-index: 2; }
+.hamburger { font-size: 28px; cursor: pointer; position: absolute; left: 0; z-index: 2; }
 .title-text { display: flex; align-items: baseline; gap: 6px; }
 
-/* ── 디스플레이 래퍼 ── */
 .display-wrap {
     margin-bottom: 12px;
 }
 
 #display {
-    width: 100%; height: 60px; font-size: 26px; text-align: right;
+    width: 100%; height: 70px; font-size: 32px; text-align: right;
     border: 2px solid #ddd; border-radius: 10px;
-    padding: 8px 10px; background: #fafafa;
+    padding: 8px 12px; background: #fafafa;
     display: block;
 }
 
@@ -65,17 +64,16 @@ html, body {
     background: var(--main-theme);
     color: var(--text-color);
     padding: 8px 12px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: bold;
 }
 
-/* 기록 리스트 영역 숨김 */
 .mem-history {
     display: none;
 }
 
-.buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-button { height: 54px; border-radius: 13px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; background: #e0e0e0; transition: opacity 0.1s; }
+.buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+button { height: 64px; border-radius: 14px; border: none; font-size: 22px; font-weight: bold; cursor: pointer; background: #e0e0e0; transition: opacity 0.1s; }
 button:active { opacity: 0.7; }
 .operator { background-color: var(--main-theme); color: var(--text-color); }
 .btn-ac { background-color: #ff3b30; color: #fff; }
@@ -83,7 +81,7 @@ button:active { opacity: 0.7; }
 .btn-equals { background-color: var(--main-theme); color: var(--text-color); }
 
 .toast {
-    height: 0; overflow: hidden; text-align: center; font-size: 13px; font-weight: bold;
+    height: 0; overflow: hidden; text-align: center; font-size: 14px; font-weight: bold;
     color: #fff; background: rgba(0,0,0,0.7); border-radius: 8px;
     transition: height 0.2s, padding 0.2s, opacity 0.3s; opacity: 0;
 }
