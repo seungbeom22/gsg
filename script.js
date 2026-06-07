@@ -123,7 +123,7 @@ function updateMemLabel() {
 function memory(type) {
     let d = document.getElementById('display');
     let raw = getRaw();
-    let v = parseFloat(raw) || 0;
+    let v = parseFloat(raw.replace(/,/g, '')) || 0;
 
     if (type === 'M+') {
         memoryValue += v;
