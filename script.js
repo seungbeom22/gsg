@@ -114,27 +114,7 @@ function showToast(msg) {
     window._toastTimer = setTimeout(() => t.classList.remove('show'), 1500);
 }
 
-function updateMemLog() {
-    let panel = document.getElementById('mem-panel');
-    let totalVal = document.getElementById('mem-total-value');
-    let histEl = document.getElementById('mem-history');
-
-    if (memoryValue === 0 && memHistory.length === 0) {
-        panel.style.display = 'none';
-        return;
-    }
-    panel.style.display = 'block';
-    totalVal.textContent = formatDisplay(memoryValue);
-
-    histEl.innerHTML = '';
-    let reversed = memHistory.slice().reverse();
-    reversed.forEach(function(e, i) {
-        let el = document.createElement('div');
-        el.className = 'mem-history-item' + (i === 0 ? ' latest' : '');
-        el.innerHTML = '<span class="log-op">' + e.op + '</span>' + '<span class="log-val">' + formatDisplay(e.val) + '</span>' + '<span class="log-arrow">→</span>' + '<span class="log-total">' + formatDisplay(e.total) + '</span>';
-        histEl.appendChild(el);
-    });
-}
+function updateMemLog() {}
 
 function updateMemLabel() {
     document.getElementById('mem-label-value').textContent = formatDisplay(memoryValue);
