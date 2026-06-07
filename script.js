@@ -38,7 +38,8 @@ function formatRawExpression(expr) {
 
 function getRaw() {
     let d = document.getElementById('display');
-    return d.dataset.raw !== undefined ? d.dataset.raw : d.value.replace(/,/g, '');
+    let raw = d.dataset.raw !== undefined ? d.dataset.raw : d.value;
+    return String(raw).replace(/,/g, '');
 }
 
 function appendToDisplay(val) {
@@ -121,7 +122,8 @@ function updateMemLog() {}
 function memory(type) {
     let d = document.getElementById('display');
     let raw = getRaw();
-    let v = parseFloat(raw.replace(/,/g, '')) || 0;
+    let v = parseFloat(String(raw).replace(/,/g, ''));
+    if (isNaN(v)) v = 0;
 
     if (type === 'M+') {
         memoryValue += v;
