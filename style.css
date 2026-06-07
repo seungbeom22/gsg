@@ -64,9 +64,12 @@ html, body {
     background: var(--main-theme);
     color: var(--text-color);
     padding: 8px 12px;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: bold;
 }
+
+.mem-total-left { display: flex; gap: 6px; align-items: center; }
+.mem-clear-msg { font-size: 11px; opacity: 0.85; font-weight: normal; }
 
 .mem-history {
     display: none;
@@ -75,7 +78,8 @@ html, body {
 .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 button { height: 64px; border-radius: 14px; border: none; font-size: 22px; font-weight: bold; cursor: pointer; background: #e0e0e0; transition: opacity 0.1s; }
 button:active { opacity: 0.7; }
-.operator { background-color: var(--main-theme); color: var(--text-color); }
+.operator { background-color: var(--main-theme); color: var(--text-color); font-size: 30px; }
+.btn-equals { font-size: 34px; }
 .btn-ac { background-color: #ff3b30; color: #fff; }
 .btn-del { background-color: #ff9500; color: #fff; }
 .btn-equals { background-color: var(--main-theme); color: var(--text-color); }

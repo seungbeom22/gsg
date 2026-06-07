@@ -162,6 +162,9 @@ function memory(type) {
         memoryValue = 0;
         memHistory = [];
         updateMemLog();
-        showToast('메모리 초기화');
+        let msg = document.getElementById('mem-clear-msg');
+        msg.textContent = '메모리 초기화';
+        clearTimeout(window._mcTimer);
+        window._mcTimer = setTimeout(() => { msg.textContent = ''; }, 5000);
     }
 }
