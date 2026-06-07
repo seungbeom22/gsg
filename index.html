@@ -2,86 +2,105 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Calculator</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로또 생성기 v1.3</title>
+    <style>
+        body { font-family: 'Malgun Gothic', sans-serif; text-align: center; padding: 20px; background-color: #f8f9fa; }
+        .result-container { display: flex; justify-content: center; gap: 5px; margin: 30px 0; min-height: 50px; }
+        .ball { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; line-height: 1; text-align: center; }
+        button { padding: 12px 20px; margin: 5px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-gen { background-color: #ffc107; }
+        .btn-save { background-color: #4caf50; color: white; }
+        .btn-clear { background-color: #ff3b30; color: white; }
+        #history { margin-top: 30px; }
+        .history-item { margin: 8px 0; font-size: 14px; color: #555; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-delete { padding: 2px 8px; font-size: 12px; background-color: #ff3b30; color: white; border-radius: 4px; cursor: pointer; border: none; font-weight: bold; }
+    </style>
 </head>
 <body>
-    <div id="overlay" class="overlay" onclick="closeMenu()"></div>
 
-    <div id="mySidenav" class="side-menu">
-        <span class="closebtn" onclick="closeMenu()">&times;</span>
-        <div class="menu-content">
-            <div class="dev-info">
-                <h3>Developer</h3>
-                <p>안녕하세요 파수범입니다.<br>이것은 저의 첫 코딩 작품입니다.<br>많은 관심 부탁드립니다.</p>
-            </div>
-            <h3>테마 설정</h3>
-            <div class="theme-buttons">
-                <button onclick="changeTheme('#FF3B30')" style="background:#FF3B30;color:#fff;">빨강</button>
-                <button onclick="changeTheme('#FF9500')" style="background:#FF9500;color:#fff;">주황</button>
-                <button onclick="changeTheme('#FFCC00')" style="background:#FFCC00;color:#000;">노랑</button>
-                <button onclick="changeTheme('#4CD964')" style="background:#4CD964;color:#000;">초록</button>
-                <button onclick="changeTheme('#007AFF')" style="background:#007AFF;color:#fff;">파랑</button>
-                <button onclick="changeTheme('#5AC8FA')" style="background:#5AC8FA;color:#000;">하늘</button>
-                <button onclick="changeTheme('#8E8E93')" style="background:#8E8E93;color:#fff;">회색</button>
-                <button onclick="changeTheme('#000000')" style="background:#000000;color:#fff;">검정</button>
-            </div>
-        </div>
+    <h1>🎰 행운의 로또 생성기</h1>
+    
+    <div class="action-btns">
+        <button class="btn-gen" onclick="generateLotto()">번호 추첨하기</button>
+        <button class="btn-save" onclick="saveLotto()">기록 저장하기</button>
+        <button class="btn-clear" onclick="clearHistory()">전체 기록 지우기</button>
     </div>
 
-    <div class="layout">
-        <div class="calculator">
-            <div class="calc-header">
-                <span class="hamburger" onclick="openMenu()">&#9776;</span>
-                <span class="title-text">계산기 <small>v2.0</small></span>
-            </div>
-            <div id="toast" class="toast"></div>
-
-            <div class="mem-panel" id="mem-panel" style="display:none;">
-                <div class="mem-total-bar" id="mem-total-bar">
-                    <span class="mem-total-left"><span class="mem-total-label">합계</span> <span class="mem-total-value" id="mem-total-value">0</span></span>
-                    <span class="mem-clear-msg" id="mem-clear-msg"></span>
-                </div>
-                <div class="mem-history" id="mem-history"></div>
-            </div>
-
-            <div class="display-wrap">
-                <input type="text" id="display" value="0" readonly>
-            </div>
-
-            <div class="buttons">
-                <button onclick="memory('MC')">MC</button>
-                <button onclick="memory('MR')">MR</button>
-                <button onclick="memory('M+')">M+</button>
-                <button onclick="memory('M-')">M-</button>
-
-                <button class="btn-ac" onclick="clearDisplay()">AC</button>
-                <button class="btn-del" onclick="deleteLast()">⌫</button>
-                <button class="operator" onclick="appendToDisplay('/')">÷</button>
-                <button class="operator" onclick="appendToDisplay('*')">×</button>
-
-                <button onclick="appendToDisplay('7')">7</button>
-                <button onclick="appendToDisplay('8')">8</button>
-                <button onclick="appendToDisplay('9')">9</button>
-                <button class="operator" onclick="appendToDisplay('-')">-</button>
-
-                <button onclick="appendToDisplay('4')">4</button>
-                <button onclick="appendToDisplay('5')">5</button>
-                <button onclick="appendToDisplay('6')">6</button>
-                <button class="operator" onclick="appendToDisplay('+')">+</button>
-
-                <button onclick="appendToDisplay('1')">1</button>
-                <button onclick="appendToDisplay('2')">2</button>
-                <button onclick="appendToDisplay('3')">3</button>
-                <button onclick="appendToDisplay('.')">.</button>
-
-                <button onclick="appendToDisplay('0')" style="grid-column:span 2;">0</button>
-                <button class="operator btn-equals" onclick="calculate()" style="grid-column:span 2;">=</button>
-            </div>
-        </div>
+    <div class="result-container" id="result"></div>
+    
+    <div id="history">
+        <h3>📜 추첨 기록</h3>
+        <div id="history-list"></div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        let currentNumbers = [];
+        let lottoHistory = JSON.parse(localStorage.getItem('lottoHistory')) || [];
+        updateHistoryUI();
+
+        function getBallColor(num) {
+            if (num <= 10) return '#fbc400';
+            if (num <= 20) return '#69c8f2';
+            if (num <= 30) return '#ff7272';
+            if (num <= 40) return '#aaaaaa';
+            return '#b0d840';
+        }
+
+        function generateLotto() {
+            currentNumbers = [];
+            while(currentNumbers.length < 6) {
+                const num = Math.floor(Math.random() * 45) + 1;
+                if(!currentNumbers.includes(num)) currentNumbers.push(num);
+            }
+            currentNumbers.sort((a, b) => a - b);
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+            currentNumbers.forEach(num => {
+                const ball = document.createElement('div');
+                ball.className = 'ball';
+                ball.innerText = num;
+                ball.style.backgroundColor = getBallColor(num);
+                resultDiv.appendChild(ball);
+            });
+        }
+
+        function saveLotto() {
+            if (currentNumbers.length === 0) {
+                alert("먼저 번호를 추첨해주세요!");
+                return;
+            }
+            lottoHistory.unshift(currentNumbers.join(', '));
+            localStorage.setItem('lottoHistory', JSON.stringify(lottoHistory));
+            updateHistoryUI();
+        }
+
+        function clearHistory() {
+            if(confirm("정말로 모든 기록을 삭제하시겠습니까?")) {
+                lottoHistory = [];
+                localStorage.removeItem('lottoHistory');
+                updateHistoryUI();
+            }
+        }
+
+        function deleteItem(index) {
+            lottoHistory.splice(index, 1);
+            localStorage.setItem('lottoHistory', JSON.stringify(lottoHistory));
+            updateHistoryUI();
+        }
+
+        function updateHistoryUI() {
+            const historyList = document.getElementById('history-list');
+            historyList.innerHTML = '';
+            lottoHistory.forEach((item, index) => {
+                const p = document.createElement('p');
+                p.className = 'history-item';
+                const actualNum = lottoHistory.length - index;
+                p.innerHTML = `<span>${actualNum}회차: [ ${item} ]</span><button class="btn-delete" onclick="deleteItem(${index})">삭제</button>`;
+                historyList.appendChild(p);
+            });
+        }
+    </script>
 </body>
 </html>
