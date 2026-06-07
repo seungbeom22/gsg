@@ -38,8 +38,7 @@ function formatRawExpression(expr) {
 
 function getRaw() {
     let d = document.getElementById('display');
-    let raw = d.dataset.raw !== undefined ? d.dataset.raw : d.value;
-    return String(raw).replace(/,/g, '');
+    return d.dataset.raw !== undefined ? d.dataset.raw : d.value.replace(/,/g, '');
 }
 
 function appendToDisplay(val) {
@@ -57,7 +56,6 @@ function appendToDisplay(val) {
         }
     }
 
-    // 연산자 연속 입력 시 마지막 연산자로 교체
     if (isOp && raw !== '' && raw !== '0') {
         const lastChar = raw.slice(-1);
         if (operators.includes(lastChar)) {
@@ -100,7 +98,6 @@ function calculate() {
         d.dataset.raw = String(result);
         d.value = formatDisplay(result);
         freshInput = true;
-        // 계산 후 히스토리 스택 초기화 (뒤로가기 한번에 나가도록)
         history.replaceState(null, '');
     } catch {
         let d = document.getElementById('display');
@@ -117,13 +114,36 @@ function showToast(msg) {
     window._toastTimer = setTimeout(() => t.classList.remove('show'), 1500);
 }
 
-function updateMemLog() {}
+function updateMemLog() {
+    let panel = document.getElementById('mem-panel');
+    let totalVal = document.getElementById('mem-total-value');
+    let histEl = document.getElementById('mem-history');
+
+    if (memoryValue === 0 && memHistory.length === 0) {
+        panel.style.display = 'none';
+        return;
+    }
+    panel.style.display = 'block';
+    totalVal.textContent = formatDisplay(memoryValue);
+
+    histEl.innerHTML = '';
+    let reversed = memHistory.slice().reverse();
+    reversed.forEach(function(e, i) {
+        let el = document.createElement('div');
+        el.className = 'mem-history-item' + (i === 0 ? ' latest' : '');
+        el.innerHTML = '<span class="log-op">' + e.op + '</span>' + '<span class="log-val">' + formatDisplay(e.val) + '</span>' + '<span class="log-arrow">→</span>' + '<span class="log-total">' + formatDisplay(e.total) + '</span>';
+        histEl.appendChild(el);
+    });
+}
+
+function updateMemLabel() {
+    document.getElementById('mem-label-value').textContent = formatDisplay(memoryValue);
+}
 
 function memory(type) {
     let d = document.getElementById('display');
     let raw = getRaw();
-    let v = parseFloat(String(raw).replace(/,/g, ''));
-    if (isNaN(v)) v = 0;
+    let v = parseFloat(raw) || 0;
 
     if (type === 'M+') {
         memoryValue += v;
@@ -148,9 +168,4 @@ function memory(type) {
         updateMemLog();
         updateMemLabel();
     }
-}
-
-function updateMemLabel() {
-    let el = document.getElementById('mem-label-value');
-    if (el) el.textContent = formatDisplay(memoryValue);
 }
