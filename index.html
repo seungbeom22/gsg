@@ -38,8 +38,8 @@
             </div>
             <div id="toast" class="toast"></div>
 
-            <div class="display-wrap">
-                <div class="mem-label">합계 <span id="mem-label-value">0</span></div>
+            <div class="display-wrap" style="position:relative;">
+                <div class="mem-label" style="position:absolute;top:6px;right:10px;z-index:1;font-size:10px;color:#aaa;margin:0;padding:0;">합계 <span id="mem-label-value">0</span></div>
                 <input type="text" id="display" value="0" readonly>
             </div>
 
@@ -54,27 +54,104 @@
                 <button class="operator" onclick="appendToDisplay('/')">÷</button>
                 <button class="operator" onclick="appendToDisplay('*')">×</button>
 
-                <button onclick="appendToDisplay('7')">7</button>
-                <button onclick="appendToDisplay('8')">8</button>
-                <button onclick="appendToDisplay('9')">9</button>
+                <button onclick="appendToDisplay('7')" style="font-size:30px">7</button>
+                <button onclick="appendToDisplay('8')" style="font-size:30px">8</button>
+                <button onclick="appendToDisplay('9')" style="font-size:30px">9</button>
                 <button class="operator" onclick="appendToDisplay('-')">-</button>
 
-                <button onclick="appendToDisplay('4')">4</button>
-                <button onclick="appendToDisplay('5')">5</button>
-                <button onclick="appendToDisplay('6')">6</button>
+                <button onclick="appendToDisplay('4')" style="font-size:30px">4</button>
+                <button onclick="appendToDisplay('5')" style="font-size:30px">5</button>
+                <button onclick="appendToDisplay('6')" style="font-size:30px">6</button>
                 <button class="operator" onclick="appendToDisplay('+')">+</button>
 
-                <button onclick="appendToDisplay('1')">1</button>
-                <button onclick="appendToDisplay('2')">2</button>
-                <button onclick="appendToDisplay('3')">3</button>
-                <button onclick="appendToDisplay('.')">.</button>
+                <button onclick="appendToDisplay('1')" style="font-size:30px">1</button>
+                <button onclick="appendToDisplay('2')" style="font-size:30px">2</button>
+                <button onclick="appendToDisplay('3')" style="font-size:30px">3</button>
+                <button class="operator" onclick="calcPercent()">%</button>
 
-                <button onclick="appendToDisplay('0')" style="grid-column:span 2;">0</button>
+                <button onclick="appendToDisplay('0')">0</button>
+                <button onclick="appendToDisplay('.')">.</button>
                 <button class="operator btn-equals" onclick="calculate()" style="grid-column:span 2;">=</button>
             </div>
         </div>
     </div>
 
+    <script>
+    // 소수점 자릿수 제한 (calculate 오버라이드)
+    const _origCalculate = window.calculate;
+    document.addEventListener('DOMContentLoaded', function() {
+        const origCalc = calculate;
+        window.calculate = function() {
+            origCalc();
+            let d = document.getElementById('display');
+            let raw = d.dataset.raw;
+            if (raw && raw !== '오류' && raw.includes('.')) {
+                let num = parseFloat(raw);
+                if (!isNaN(num)) {
+                    // 최대 10자리, 불필요한 0 제거
+                    let rounded = parseFloat(num.toPrecision(10));
+                    d.dataset.raw = String(rounded);
+                    d.value = formatDisplay(rounded);
+                }
+            }
+        };
+    });
+
+    function applyPercent() {
+        let d = document.getElementById('display');
+        let raw = getRaw();
+        // 식에 연산자가 있으면 마지막 숫자를 %로 변환
+        const match = raw.match(/^(.*[\+\-\*\/])(\d+\.?\d*)$/);
+        if (match) {
+            let base = eval(match[1].slice(0, -1));
+            let pct = parseFloat(match[2]) / 100;
+            let result = base * pct;
+            raw = match[1] + result;
+        } else {
+            let num = parseFloat(raw.replace(/,/g,''));
+            if (isNaN(num)) return;
+            raw = String(num / 100);
+        }
+        d.dataset.raw = raw;
+        d.value = formatDisplay(parseFloat(raw));
+        freshInput = true;
+    }
+    </script>
     <script src="script.js"></script>
+    <script>
+        // 디스플레이 숫자 글씨 크게
+        document.getElementById('display').style.fontSize = '38px';
+
+        // 퍼센트 함수
+        function calcPercent() {
+            let d = document.getElementById('display');
+            let raw = getRaw();
+            try {
+                let val = eval(raw);
+                let result = parseFloat((val / 100).toPrecision(10));
+                d.dataset.raw = String(result);
+                d.value = formatDisplay(result);
+                freshInput = true;
+            } catch(e) {}
+        }
+
+        // 소수점 자릿수 제한 (calculate 오버라이드)
+        calculate = function() {
+            try {
+                let d = document.getElementById('display');
+                let raw = getRaw();
+                let result = eval(raw.replace(/×/g, '*').replace(/÷/g, '/'));
+                result = parseFloat(parseFloat(result).toPrecision(10));
+                d.dataset.raw = String(result);
+                d.value = formatDisplay(result);
+                freshInput = true;
+                history.replaceState(null, '');
+            } catch {
+                let d = document.getElementById('display');
+                d.dataset.raw = '오류';
+                d.value = '오류';
+            }
+        };
+    </script>
 </body>
 </html>

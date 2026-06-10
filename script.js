@@ -1,151 +1,105 @@
-let memoryValue = 0;
-let freshInput = false;
-let memHistory = [];
+:root { --main-theme: #ff9500; --text-color: #000; }
 
-function openMenu() {
-    document.getElementById("mySidenav").classList.add("open");
-    document.getElementById("overlay").classList.add("show");
-    history.pushState({ menuOpen: true }, '');
-}
-function closeMenu() {
-    document.getElementById("mySidenav").classList.remove("open");
-    document.getElementById("overlay").classList.remove("show");
-}
-window.addEventListener('popstate', function() {
-    if (document.getElementById("mySidenav").classList.contains("open")) closeMenu();
-});
-
-function changeTheme(color) {
-    document.documentElement.style.setProperty('--main-theme', color);
-    document.documentElement.style.setProperty('--text-color', color === '#000000' ? '#ffffff' : '#000000');
-    closeMenu();
+* {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    box-sizing: border-box;
 }
 
-function formatDisplay(val) {
-    if (val === '' || val === '오류') return val;
-    let parts = String(val).split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    return parts.join('.');
+html, body {
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #f2f4f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-function formatRawExpression(expr) {
-    return expr.replace(/(\d+\.?\d*)/g, function(num) {
-        let parts = num.split('.');
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        return parts.join('.');
-    });
+.layout {
+    display: flex;
+    align-items: flex-start;
 }
 
-function getRaw() {
-    let d = document.getElementById('display');
-    return d.dataset.raw !== undefined ? d.dataset.raw : d.value.replace(/,/g, '');
+.calculator {
+    width: 360px;
+    background: #fff;
+    padding: 18px;
+    border-radius: 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    flex-shrink: 0;
 }
 
-function appendToDisplay(val) {
-    let d = document.getElementById('display');
-    let raw = getRaw();
-    const operators = ['+', '-', '*', '/'];
-    const isOp = operators.includes(val);
+.calc-header {
+    display: flex; align-items: center; justify-content: center;
+    position: relative; margin-bottom: 14px; font-weight: bold; font-size: 20px;
+}
+.hamburger { font-size: 28px; cursor: pointer; position: absolute; left: 0; z-index: 2; }
+.title-text { display: flex; align-items: baseline; gap: 6px; }
 
-    if (freshInput) {
-        if (isOp) {
-            freshInput = false;
-        } else {
-            raw = '';
-            freshInput = false;
-        }
-    }
-
-    if (isOp && raw !== '' && raw !== '0') {
-        const lastChar = raw.slice(-1);
-        if (operators.includes(lastChar)) {
-            raw = raw.slice(0, -1) + val;
-            d.dataset.raw = raw;
-            d.value = formatRawExpression(raw);
-            return;
-        }
-    }
-
-    if (raw === '0' || raw === '') {
-        raw = isOp ? '0' + val : val;
-    } else {
-        raw += val;
-    }
-    d.dataset.raw = raw;
-    d.value = formatRawExpression(raw);
+.display-wrap {
+    margin-bottom: 12px;
 }
 
-function clearDisplay() {
-    let d = document.getElementById('display');
-    d.dataset.raw = '0';
-    d.value = '0';
-    freshInput = false;
+.mem-label {
+    font-size: 11px;
+    color: #aaa;
+    margin-bottom: 2px;
+    padding-left: 4px;
 }
 
-function deleteLast() {
-    let d = document.getElementById('display');
-    let raw = getRaw();
-    raw = raw.length <= 1 ? '0' : raw.slice(0, -1);
-    d.dataset.raw = raw;
-    d.value = formatRawExpression(raw);
+#display {
+    width: 100%; height: 70px; font-size: 32px; text-align: right;
+    border: 2px solid #ddd; border-radius: 10px;
+    padding: 8px 12px; background: #fafafa;
+    display: block;
 }
 
-function calculate() {
-    try {
-        let d = document.getElementById('display');
-        let raw = getRaw();
-        let result = eval(raw.replace(/×/g, '*').replace(/÷/g, '/'));
-        d.dataset.raw = String(result);
-        d.value = formatDisplay(result);
-        freshInput = true;
-        history.replaceState(null, '');
-    } catch {
-        let d = document.getElementById('display');
-        d.dataset.raw = '오류';
-        d.value = '오류';
-    }
+.mem-panel {
+    background: #f0f0f0;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 
-function showToast(msg) {
-    let t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    clearTimeout(window._toastTimer);
-    window._toastTimer = setTimeout(() => t.classList.remove('show'), 1500);
+.mem-total-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--main-theme);
+    color: var(--text-color);
+    padding: 8px 12px;
+    font-size: 15px;
+    font-weight: bold;
 }
 
-function updateMemLog() {}
-
-function updateMemLabel() {
-    document.getElementById('mem-label-value').textContent = formatDisplay(memoryValue);
+.mem-history {
+    display: none;
 }
 
-function memory(type) {
-    let d = document.getElementById('display');
-    let raw = getRaw();
-    let v = parseFloat(raw.replace(/,/g, '')) || 0;
+.buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+button { height: 64px; border-radius: 14px; border: none; font-size: 22px; font-weight: bold; cursor: pointer; background: #e0e0e0; transition: opacity 0.1s; }
+button:active { opacity: 0.7; }
+.operator { background-color: var(--main-theme); color: var(--text-color); font-size: 30px; }
+.btn-ac { background-color: #ff3b30; color: #fff; }
+.btn-del { background-color: #ff9500; color: #fff; }
+.btn-equals { background-color: var(--main-theme); color: var(--text-color); font-size: 34px; }
 
-    if (type === 'M+') {
-        memoryValue += v;
-        memHistory.push({ op: 'M+', val: v, total: memoryValue });
-        freshInput = true;
-        updateMemLog();
-        updateMemLabel();
-    } else if (type === 'M-') {
-        memoryValue -= v;
-        memHistory.push({ op: 'M−', val: v, total: memoryValue });
-        freshInput = true;
-        updateMemLog();
-        updateMemLabel();
-    } else if (type === 'MR') {
-        d.dataset.raw = String(memoryValue);
-        d.value = formatDisplay(memoryValue);
-        showToast('MR : ' + formatDisplay(memoryValue));
-        freshInput = true;
-    } else if (type === 'MC') {
-        memoryValue = 0;
-        memHistory = [];
-        updateMemLog();
-        updateMemLabel();
-    }
+.toast {
+    height: 0; overflow: hidden; text-align: center; font-size: 14px; font-weight: bold;
+    color: #fff; background: rgba(0,0,0,0.7); border-radius: 8px;
+    transition: height 0.2s, padding 0.2s, opacity 0.3s; opacity: 0;
 }
+.toast.show { height: auto; padding: 6px; opacity: 1; margin-bottom: 6px; }
+
+.overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 998; }
+.overlay.show { display: block; }
+.side-menu { height: 100%; width: 260px; position: fixed; top: 0; left: 0; background: #111; overflow: hidden; transition: transform 0.3s ease; z-index: 1000; transform: translateX(-100%); }
+.side-menu.open { transform: translateX(0); }
+.closebtn { position: absolute; top: 10px; right: 20px; color: #ff3b30; font-size: 36px; cursor: pointer; }
+.menu-content { padding: 18px; color: #fff; margin-top: 50px; }
+.theme-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.theme-buttons button { height: auto; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; padding: 10px; font-size: 13px; }
+.dev-info { margin-bottom: 18px; }
