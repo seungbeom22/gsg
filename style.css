@@ -102,4 +102,5 @@ button:active { opacity: 0.7; }
 .menu-content { padding: 18px; color: #fff; margin-top: 50px; }
 .theme-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .theme-buttons button { height: auto; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; padding: 10px; font-size: 13px; }
-.dev-info { margin-bottom: 18px; }
+.dev-info { margin-bottom: 
+           
