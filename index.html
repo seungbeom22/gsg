@@ -41,6 +41,7 @@
             <div class="display-wrap" style="position:relative;">
                 <div class="mem-label" style="position:absolute;top:6px;right:10px;z-index:1;font-size:10px;color:#aaa;margin:0;padding:0;">합계 <span id="mem-label-value">0</span></div>
                 <input type="text" id="display" value="0" readonly>
+                <div id="mr-label" style="font-size:11px;color:#aaa;text-align:right;padding-right:4px;min-height:16px;margin-top:2px;"></div>
             </div>
 
             <div class="buttons">
@@ -76,32 +77,22 @@
         </div>
     </div>
 
+    <script src="script.js"></script>
     <script>
-    // 소수점 자릿수 제한 (calculate 오버라이드)
-    const _origCalculate = window.calculate;
-    document.addEventListener('DOMContentLoaded', function() {
-        const origCalc = calculate;
-        window.calculate = function() {
-            origCalc();
-            let d = document.getElementById('display');
-            let raw = d.dataset.raw;
-            if (raw && raw !== '오류' && raw.includes('.')) {
-                let num = parseFloat(raw);
-                if (!isNaN(num)) {
-                    // 최대 10자리, 불필요한 0 제거
-                    let rounded = parseFloat(num.toPrecision(10));
-                    d.dataset.raw = String(rounded);
-                    d.value = formatDisplay(rounded);
-                }
-            }
-        };
-    });
+    // MR 라벨 표시 (showToast 오버라이드)
+    const _origShowToast = showToast;
+    window.showToast = function(msg) {
+        _origShowToast(msg);
+        if (msg.startsWith('MR')) {
+            document.getElementById('mr-label').textContent = msg;
+        }
+    };
 
-    function applyPercent() {
+    // % 기능
+    function calcPercent() {
         let d = document.getElementById('display');
         let raw = getRaw();
-        // 식에 연산자가 있으면 마지막 숫자를 %로 변환
-        const match = raw.match(/^(.*[\+\-\*\/])(\d+\.?\d*)$/);
+        const match = raw.match(/^(.*[+\-*/])(\d+\.?\d*)$/);
         if (match) {
             let base = eval(match[1].slice(0, -1));
             let pct = parseFloat(match[2]) / 100;
@@ -116,8 +107,23 @@
         d.value = formatDisplay(parseFloat(raw));
         freshInput = true;
     }
+
+    // 소수점 자릿수 제한: calculate 래핑
+    const _origCalc = calculate;
+    window.calculate = function() {
+        _origCalc();
+        let d = document.getElementById('display');
+        let raw = d.dataset.raw;
+        if (raw && raw !== '오류' && String(raw).includes('.')) {
+            let num = parseFloat(raw);
+            if (!isNaN(num)) {
+                let rounded = parseFloat(num.toPrecision(10));
+                d.dataset.raw = String(rounded);
+                d.value = formatDisplay(rounded);
+            }
+        }
+    };
     </script>
-    <script src="script.js"></script>
     <script>
         // 디스플레이 숫자 글씨 크게
         document.getElementById('display').style.fontSize = '38px';
