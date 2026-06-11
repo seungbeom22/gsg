@@ -13,8 +13,9 @@
         .calc-header { display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 14px; font-weight: bold; font-size: 20px; }
         .hamburger { font-size: 28px; cursor: pointer; position: absolute; left: 0; z-index: 2; }
         .title-text { display: flex; align-items: baseline; gap: 6px; }
-        .display-wrap { margin-bottom: 12px; position: relative; }
-        .mem-label { position: absolute; top: 6px; right: 10px; font-size: 10px; color: #aaa; }
+        .display-wrap { margin-bottom: 12px; }
+        .display-top { display: flex; justify-content: flex-end; font-size: 10px; color: #aaa; padding-right: 4px; margin-bottom: 2px; }
+        .display-bottom { font-size: 11px; color: #aaa; padding-left: 4px; min-height: 16px; margin-top: 2px; }
         #display { width: 100%; height: 70px; font-size: 38px; text-align: right; border: 2px solid #ddd; border-radius: 10px; padding: 8px 12px; background: #fafafa; display: block; outline: none; }
         .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
         button { height: 64px; border-radius: 14px; border: none; font-size: 22px; font-weight: bold; cursor: pointer; background: #e0e0e0; transition: opacity 0.1s; }
@@ -23,8 +24,6 @@
         .btn-ac { background-color: #ff3b30; color: #fff; }
         .btn-del { background-color: #ff9500; color: #fff; }
         .btn-equals { background-color: var(--main-theme); color: var(--text-color); font-size: 34px; }
-        .toast { height: 0; overflow: hidden; text-align: center; font-size: 14px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.7); border-radius: 8px; transition: height 0.2s, padding 0.2s, opacity 0.3s; opacity: 0; pointer-events: none; }
-        .toast.show { height: auto; padding: 6px; opacity: 1; margin-bottom: 6px; }
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 998; }
         .overlay.show { display: block; }
         .side-menu { height: 100%; width: 260px; position: fixed; top: 0; left: 0; background: #111; overflow: hidden; transition: transform 0.3s ease; z-index: 1000; transform: translateX(-100%); }
@@ -65,11 +64,10 @@
                 <span class="hamburger" onclick="openMenu()">&#9776;</span>
                 <span class="title-text">계산기 <small>v2.0</small></span>
             </div>
-            <div id="toast" class="toast"></div>
             <div class="display-wrap">
-                <div class="mem-label">합계 <span id="mem-label-value">0</span></div>
+                <div class="display-top">합계 <span id="mem-label-value">0</span></div>
                 <input type="text" id="display" value="0" readonly>
-                <div id="mr-label" style="font-size:11px;color:#aaa;text-align:left;padding-left:4px;min-height:16px;margin-top:2px;"></div>
+                <div id="mr-label" class="display-bottom"></div>
             </div>
             <div class="buttons">
                 <button onclick="memory('MC')">MC</button>
@@ -100,12 +98,9 @@
     </div>
 
     <script>
-        // --- 상태 ---
-        let numA = null;   // 첫 번째 피연산자
-        let op = null;     // 연산자
-        let numB = null;   // 두 번째 피연산자
-        let displayStr = '0';  // 화면에 보이는 문자열
-        let justCalc = false;  // 방금 = 눌렀는지
+        let numA = null, op = null, numB = null;
+        let displayStr = '0';
+        let justCalc = false;
         let memValue = 0;
 
         const disp = () => document.getElementById('display');
@@ -117,29 +112,23 @@
 
         function formatNum(n) {
             if (n === null || isNaN(n)) return '오류';
-            // 소수점 10자리까지, 불필요한 0 제거
             let s = parseFloat(n.toPrecision(10)).toString();
-            // 천단위 콤마
             let parts = s.split('.');
             parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             return parts.join('.');
         }
 
-        // 숫자 입력
         function inputNum(n) {
             if (justCalc) {
-                // = 누른 뒤 숫자 → 새 계산 시작
                 numA = null; op = null; numB = null;
                 justCalc = false;
                 updateDisplay(n);
                 return;
             }
             if (op === null) {
-                // A 입력 중
                 if (displayStr === '0') updateDisplay(n);
                 else updateDisplay(displayStr + n);
             } else {
-                // B 입력 중
                 if (numB === null) updateDisplay(n);
                 else updateDisplay(displayStr + n);
                 numB = 'typing';
@@ -151,20 +140,16 @@
             if (!displayStr.includes('.')) updateDisplay(displayStr + '.');
         }
 
-        // 연산자 입력
         function inputOp(o) {
             justCalc = false;
             let cur = parseFloat(displayStr.replace(/,/g, ''));
             if (op !== null && numB !== null && numB !== 'typing') {
-                // 연속 계산
                 cur = doCalc(numA, op, parseFloat(displayStr.replace(/,/g,'')));
                 updateDisplay(formatNum(cur));
             }
             numA = isNaN(cur) ? 0 : cur;
             op = o;
             numB = null;
-
-            // 연산자 표시
             const opSymbol = o === '*' ? '×' : o === '/' ? '÷' : o;
             disp().value = formatNum(numA) + ' ' + opSymbol;
         }
@@ -199,12 +184,7 @@
         function calcPercent() {
             let cur = parseFloat(displayStr.replace(/,/g, ''));
             if (isNaN(cur)) return;
-            let result;
-            if (op !== null && numA !== null) {
-                result = numA * (cur / 100);
-            } else {
-                result = cur / 100;
-            }
+            let result = (op !== null && numA !== null) ? numA * (cur / 100) : cur / 100;
             result = parseFloat(result.toPrecision(10));
             numB = result;
             updateDisplay(formatNum(result));
@@ -220,7 +200,7 @@
             if (justCalc || op !== null) { clearDisplay(); return; }
             let s = displayStr.replace(/,/g, '');
             s = s.length > 1 ? s.slice(0, -1) : '0';
-            updateDisplay(s === '0' ? '0' : formatNum(parseFloat(s)) === s ? s : s);
+            updateDisplay(s);
             if (s === '0') justCalc = false;
         }
 
@@ -230,7 +210,6 @@
                 memValue = 0;
                 document.getElementById('mem-label-value').textContent = '0';
                 document.getElementById('mr-label').textContent = '';
-                showToast('메모리 초기화');
             } else if (m === 'MR') {
                 updateDisplay(formatNum(memValue));
                 numA = null; op = null; numB = null; justCalc = true;
@@ -238,21 +217,10 @@
             } else if (m === 'M+') {
                 memValue = parseFloat((memValue + cur).toPrecision(10));
                 document.getElementById('mem-label-value').textContent = formatNum(memValue);
-                showToast('M+: ' + formatNum(memValue));
             } else if (m === 'M-') {
                 memValue = parseFloat((memValue - cur).toPrecision(10));
                 document.getElementById('mem-label-value').textContent = formatNum(memValue);
-                showToast('M-: ' + formatNum(memValue));
             }
-        }
-
-        let toastTimer;
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.classList.add('show');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
         }
 
         function openMenu() {
