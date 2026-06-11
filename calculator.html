@@ -15,7 +15,6 @@
         .title-text { display: flex; align-items: baseline; gap: 6px; }
         .display-wrap { margin-bottom: 12px; position: relative; }
         .mem-label { position: absolute; top: 6px; right: 10px; font-size: 10px; color: #aaa; }
-        .mr-label { position: absolute; top: 6px; left: 10px; font-size: 10px; color: #aaa; }
         #display { width: 100%; height: 70px; font-size: 38px; text-align: right; border: 2px solid #ddd; border-radius: 10px; padding: 8px 12px; background: #fafafa; display: block; outline: none; }
         .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
         button { height: 64px; border-radius: 14px; border: none; font-size: 22px; font-weight: bold; cursor: pointer; background: #e0e0e0; transition: opacity 0.1s; }
@@ -68,7 +67,6 @@
             </div>
             <div id="toast" class="toast"></div>
             <div class="display-wrap">
-                <div class="mr-label">MR <span id="mr-label-value" style="display:none;">0</span></div>
                 <div class="mem-label">합계 <span id="mem-label-value">0</span></div>
                 <input type="text" id="display" value="0" readonly>
             </div>
@@ -215,7 +213,6 @@
         function clearDisplay() {
             numA = null; op = null; numB = null; justCalc = false;
             updateDisplay('0');
-            document.getElementById('mr-label-value').style.display = 'none';
         }
 
         function deleteLast() {
@@ -231,14 +228,10 @@
             if (m === 'MC') {
                 memValue = 0;
                 document.getElementById('mem-label-value').textContent = '0';
-                document.getElementById('mr-label-value').style.display = 'none';
                 showToast('메모리 초기화');
             } else if (m === 'MR') {
                 updateDisplay(formatNum(memValue));
                 numA = null; op = null; numB = null; justCalc = true;
-                const mrv = document.getElementById('mr-label-value');
-                mrv.textContent = formatNum(memValue);
-                mrv.style.display = 'inline';
                 showToast('MR: ' + formatNum(memValue));
             } else if (m === 'M+') {
                 memValue = parseFloat((memValue + cur).toPrecision(10));
