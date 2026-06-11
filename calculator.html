@@ -23,7 +23,7 @@
         .btn-ac { background-color: #ff3b30; color: #fff; }
         .btn-del { background-color: #ff9500; color: #fff; }
         .btn-equals { background-color: var(--main-theme); color: var(--text-color); font-size: 34px; }
-        .toast { height: 0; overflow: hidden; text-align: center; font-size: 14px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.7); border-radius: 8px; transition: height 0.2s, padding 0.2s, opacity 0.3s; opacity: 0; }
+        .toast { height: 0; overflow: hidden; text-align: center; font-size: 14px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.7); border-radius: 8px; transition: height 0.2s, padding 0.2s, opacity 0.3s; opacity: 0; pointer-events: none; }
         .toast.show { height: auto; padding: 6px; opacity: 1; margin-bottom: 6px; }
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 998; }
         .overlay.show { display: block; }
@@ -69,6 +69,7 @@
             <div class="display-wrap">
                 <div class="mem-label">합계 <span id="mem-label-value">0</span></div>
                 <input type="text" id="display" value="0" readonly>
+                <div id="mr-label" style="font-size:11px;color:#aaa;text-align:left;padding-left:4px;min-height:16px;margin-top:2px;"></div>
             </div>
             <div class="buttons">
                 <button onclick="memory('MC')">MC</button>
@@ -228,11 +229,12 @@
             if (m === 'MC') {
                 memValue = 0;
                 document.getElementById('mem-label-value').textContent = '0';
+                document.getElementById('mr-label').textContent = '';
                 showToast('메모리 초기화');
             } else if (m === 'MR') {
                 updateDisplay(formatNum(memValue));
                 numA = null; op = null; numB = null; justCalc = true;
-                showToast('MR: ' + formatNum(memValue));
+                document.getElementById('mr-label').textContent = 'MR: ' + formatNum(memValue);
             } else if (m === 'M+') {
                 memValue = parseFloat((memValue + cur).toPrecision(10));
                 document.getElementById('mem-label-value').textContent = formatNum(memValue);
