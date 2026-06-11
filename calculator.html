@@ -6,85 +6,29 @@
     <title>Calculator</title>
     <style>
         :root { --main-theme: #ff9500; --text-color: #000; }
-
-        * {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            overflow: hidden;
-            background: #f2f4f7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
+        * { -webkit-user-select: none; user-select: none; box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #f2f4f7; display: flex; justify-content: center; align-items: center; }
         .layout { display: flex; align-items: flex-start; }
-
-        .calculator {
-            width: 360px;
-            background: #fff;
-            padding: 18px;
-            border-radius: 28px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-        }
-
-        .calc-header {
-            display: flex; align-items: center; justify-content: center;
-            position: relative; margin-bottom: 14px; font-weight: bold; font-size: 20px;
-        }
+        .calculator { width: 360px; background: #fff; padding: 18px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+        .calc-header { display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 14px; font-weight: bold; font-size: 20px; }
         .hamburger { font-size: 28px; cursor: pointer; position: absolute; left: 0; z-index: 2; }
         .title-text { display: flex; align-items: baseline; gap: 6px; }
-
         .display-wrap { margin-bottom: 12px; position: relative; }
-
-        .mem-label {
-            position: absolute; top: 6px; right: 10px;
-            font-size: 10px; color: #aaa;
-        }
-        .mr-label {
-            position: absolute; top: 6px; left: 10px;
-            font-size: 10px; color: #aaa;
-        }
-
-        #display {
-            width: 100%; height: 70px; font-size: 38px; text-align: right;
-            border: 2px solid #ddd; border-radius: 10px;
-            padding: 8px 12px; background: #fafafa;
-            display: block; outline: none;
-        }
-
+        .mem-label { position: absolute; top: 6px; right: 10px; font-size: 10px; color: #aaa; }
+        .mr-label { position: absolute; top: 6px; left: 10px; font-size: 10px; color: #aaa; }
+        #display { width: 100%; height: 70px; font-size: 38px; text-align: right; border: 2px solid #ddd; border-radius: 10px; padding: 8px 12px; background: #fafafa; display: block; outline: none; }
         .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        button {
-            height: 64px; border-radius: 14px; border: none;
-            font-size: 22px; font-weight: bold; cursor: pointer;
-            background: #e0e0e0; transition: opacity 0.1s;
-        }
+        button { height: 64px; border-radius: 14px; border: none; font-size: 22px; font-weight: bold; cursor: pointer; background: #e0e0e0; transition: opacity 0.1s; }
         button:active { opacity: 0.7; }
         .operator { background-color: var(--main-theme); color: var(--text-color); font-size: 30px; }
         .btn-ac { background-color: #ff3b30; color: #fff; }
         .btn-del { background-color: #ff9500; color: #fff; }
         .btn-equals { background-color: var(--main-theme); color: var(--text-color); font-size: 34px; }
-
-        .toast {
-            height: 0; overflow: hidden; text-align: center; font-size: 14px; font-weight: bold;
-            color: #fff; background: rgba(0,0,0,0.7); border-radius: 8px;
-            transition: height 0.2s, padding 0.2s, opacity 0.3s; opacity: 0;
-        }
+        .toast { height: 0; overflow: hidden; text-align: center; font-size: 14px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.7); border-radius: 8px; transition: height 0.2s, padding 0.2s, opacity 0.3s; opacity: 0; }
         .toast.show { height: auto; padding: 6px; opacity: 1; margin-bottom: 6px; }
-
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 998; }
         .overlay.show { display: block; }
-        .side-menu {
-            height: 100%; width: 260px; position: fixed; top: 0; left: 0;
-            background: #111; overflow: hidden; transition: transform 0.3s ease;
-            z-index: 1000; transform: translateX(-100%);
-        }
+        .side-menu { height: 100%; width: 260px; position: fixed; top: 0; left: 0; background: #111; overflow: hidden; transition: transform 0.3s ease; z-index: 1000; transform: translateX(-100%); }
         .side-menu.open { transform: translateX(0); }
         .closebtn { position: absolute; top: 10px; right: 20px; color: #ff3b30; font-size: 36px; cursor: pointer; }
         .menu-content { padding: 18px; color: #fff; margin-top: 50px; }
@@ -95,7 +39,6 @@
 </head>
 <body>
     <div id="overlay" class="overlay" onclick="closeMenu()"></div>
-
     <div id="mySidenav" class="side-menu">
         <span class="closebtn" onclick="closeMenu()">&times;</span>
         <div class="menu-content">
@@ -124,188 +67,187 @@
                 <span class="title-text">계산기 <small>v2.0</small></span>
             </div>
             <div id="toast" class="toast"></div>
-
             <div class="display-wrap">
                 <div class="mr-label">MR <span id="mr-label-value" style="display:none;">0</span></div>
                 <div class="mem-label">합계 <span id="mem-label-value">0</span></div>
                 <input type="text" id="display" value="0" readonly>
             </div>
-
             <div class="buttons">
                 <button onclick="memory('MC')">MC</button>
                 <button onclick="memory('MR')">MR</button>
                 <button onclick="memory('M+')">M+</button>
                 <button onclick="memory('M-')">M-</button>
-
                 <button class="btn-ac" onclick="clearDisplay()">AC</button>
                 <button class="btn-del" onclick="deleteLast()">⌫</button>
-                <button class="operator" onclick="appendToDisplay('/')">÷</button>
-                <button class="operator" onclick="appendToDisplay('*')">×</button>
-
-                <button onclick="appendToDisplay('7')" style="font-size:30px">7</button>
-                <button onclick="appendToDisplay('8')" style="font-size:30px">8</button>
-                <button onclick="appendToDisplay('9')" style="font-size:30px">9</button>
-                <button class="operator" onclick="appendToDisplay('-')">-</button>
-
-                <button onclick="appendToDisplay('4')" style="font-size:30px">4</button>
-                <button onclick="appendToDisplay('5')" style="font-size:30px">5</button>
-                <button onclick="appendToDisplay('6')" style="font-size:30px">6</button>
-                <button class="operator" onclick="appendToDisplay('+')">+</button>
-
-                <button onclick="appendToDisplay('1')" style="font-size:30px">1</button>
-                <button onclick="appendToDisplay('2')" style="font-size:30px">2</button>
-                <button onclick="appendToDisplay('3')" style="font-size:30px">3</button>
+                <button class="operator" onclick="inputOp('/')">÷</button>
+                <button class="operator" onclick="inputOp('*')">×</button>
+                <button onclick="inputNum('7')" style="font-size:30px">7</button>
+                <button onclick="inputNum('8')" style="font-size:30px">8</button>
+                <button onclick="inputNum('9')" style="font-size:30px">9</button>
+                <button class="operator" onclick="inputOp('-')">-</button>
+                <button onclick="inputNum('4')" style="font-size:30px">4</button>
+                <button onclick="inputNum('5')" style="font-size:30px">5</button>
+                <button onclick="inputNum('6')" style="font-size:30px">6</button>
+                <button class="operator" onclick="inputOp('+')">+</button>
+                <button onclick="inputNum('1')" style="font-size:30px">1</button>
+                <button onclick="inputNum('2')" style="font-size:30px">2</button>
+                <button onclick="inputNum('3')" style="font-size:30px">3</button>
                 <button class="operator" onclick="calcPercent()">%</button>
-
-                <button onclick="appendToDisplay('0')" style="font-size:30px">0</button>
-                <button onclick="appendToDisplay('.')">.</button>
+                <button onclick="inputNum('0')" style="font-size:30px">0</button>
+                <button onclick="inputDot()">.</button>
                 <button class="operator btn-equals" onclick="calculate()" style="grid-column:span 2;">=</button>
             </div>
         </div>
     </div>
 
     <script>
+        // --- 상태 ---
+        let numA = null;   // 첫 번째 피연산자
+        let op = null;     // 연산자
+        let numB = null;   // 두 번째 피연산자
+        let displayStr = '0';  // 화면에 보이는 문자열
+        let justCalc = false;  // 방금 = 눌렀는지
         let memValue = 0;
-        let freshInput = true;
 
-        function getRaw() {
-            return document.getElementById('display').dataset.raw || '0';
+        const disp = () => document.getElementById('display');
+
+        function updateDisplay(val) {
+            displayStr = val;
+            disp().value = val;
         }
 
-        function formatDisplay(num) {
-            if (isNaN(num) || num === null) return '오류';
-            return num.toLocaleString('ko-KR', { maximumFractionDigits: 10 });
+        function formatNum(n) {
+            if (n === null || isNaN(n)) return '오류';
+            // 소수점 10자리까지, 불필요한 0 제거
+            let s = parseFloat(n.toPrecision(10)).toString();
+            // 천단위 콤마
+            let parts = s.split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return parts.join('.');
         }
 
-        function appendToDisplay(val) {
-            const d = document.getElementById('display');
-            let raw = getRaw();
-            const ops = ['+', '-', '*', '/'];
-
-            if (freshInput) {
-                if (ops.includes(val)) {
-                    // append operator to current result
-                    raw = raw + val;
-                    freshInput = false;
-                } else {
-                    raw = val === '.' ? '0.' : val;
-                    freshInput = false;
-                }
+        // 숫자 입력
+        function inputNum(n) {
+            if (justCalc) {
+                // = 누른 뒤 숫자 → 새 계산 시작
+                numA = null; op = null; numB = null;
+                justCalc = false;
+                updateDisplay(n);
+                return;
+            }
+            if (op === null) {
+                // A 입력 중
+                if (displayStr === '0') updateDisplay(n);
+                else updateDisplay(displayStr + n);
             } else {
-                const lastChar = raw.slice(-1);
-                if (ops.includes(val) && ops.includes(lastChar)) {
-                    raw = raw.slice(0, -1) + val;
-                } else if (val === '.' && /\.\d*$/.test(raw.split(/[+\-*/]/).pop())) {
-                    return; // already has decimal
-                } else {
-                    raw = raw + val;
-                }
+                // B 입력 중
+                if (numB === null) updateDisplay(n);
+                else updateDisplay(displayStr + n);
+                numB = 'typing';
             }
+        }
 
-            d.dataset.raw = raw;
-            // Show expression while typing, formatted number after result
-            try {
-                const segments = raw.split(/([+\-*/])/);
-                const lastNum = segments[segments.length - 1];
-                if (lastNum && !isNaN(parseFloat(lastNum)) && !ops.includes(raw.slice(-1))) {
-                    d.value = formatDisplay(parseFloat(lastNum));
-                } else {
-                    d.value = raw.replace(/\*/g, '×').replace(/\//g, '÷');
-                }
-            } catch(e) {
-                d.value = raw;
+        function inputDot() {
+            if (justCalc) { numA=null; op=null; numB=null; justCalc=false; updateDisplay('0.'); return; }
+            if (!displayStr.includes('.')) updateDisplay(displayStr + '.');
+        }
+
+        // 연산자 입력
+        function inputOp(o) {
+            justCalc = false;
+            let cur = parseFloat(displayStr.replace(/,/g, ''));
+            if (op !== null && numB !== null && numB !== 'typing') {
+                // 연속 계산
+                cur = doCalc(numA, op, parseFloat(displayStr.replace(/,/g,'')));
+                updateDisplay(formatNum(cur));
             }
+            numA = isNaN(cur) ? 0 : cur;
+            op = o;
+            numB = null;
+
+            // 연산자 표시
+            const opSymbol = o === '*' ? '×' : o === '/' ? '÷' : o;
+            disp().value = formatNum(numA) + ' ' + opSymbol;
+        }
+
+        function doCalc(a, operator, b) {
+            switch(operator) {
+                case '+': return a + b;
+                case '-': return a - b;
+                case '*': return a * b;
+                case '/': return b === 0 ? NaN : a / b;
+            }
+            return b;
         }
 
         function calculate() {
-            const d = document.getElementById('display');
-            let raw = getRaw();
-            try {
-                let result = eval(raw);
-                result = parseFloat(parseFloat(result).toPrecision(10));
-                d.dataset.raw = String(result);
-                d.value = formatDisplay(result);
-                freshInput = true;
-            } catch(e) {
-                d.dataset.raw = '오류';
-                d.value = '오류';
-                freshInput = true;
+            if (op === null) return;
+            let b = parseFloat(displayStr.replace(/,/g, ''));
+            if (numB === null || numB === 'typing') numB = b;
+            let result = doCalc(numA, op, numB);
+            result = parseFloat(parseFloat(result).toPrecision(10));
+            if (isNaN(result)) {
+                updateDisplay('오류');
+            } else {
+                updateDisplay(formatNum(result));
+                numA = result;
             }
+            justCalc = true;
+            op = null;
+            numB = null;
+        }
+
+        function calcPercent() {
+            let cur = parseFloat(displayStr.replace(/,/g, ''));
+            if (isNaN(cur)) return;
+            let result;
+            if (op !== null && numA !== null) {
+                result = numA * (cur / 100);
+            } else {
+                result = cur / 100;
+            }
+            result = parseFloat(result.toPrecision(10));
+            numB = result;
+            updateDisplay(formatNum(result));
+            justCalc = true;
         }
 
         function clearDisplay() {
-            const d = document.getElementById('display');
-            d.dataset.raw = '0';
-            d.value = '0';
-            freshInput = true;
+            numA = null; op = null; numB = null; justCalc = false;
+            updateDisplay('0');
             document.getElementById('mr-label-value').style.display = 'none';
         }
 
         function deleteLast() {
-            const d = document.getElementById('display');
-            let raw = getRaw();
-            if (freshInput || raw === '오류') {
-                clearDisplay(); return;
-            }
-            raw = raw.slice(0, -1) || '0';
-            d.dataset.raw = raw;
-            try {
-                const segments = raw.split(/([+\-*/])/);
-                const lastNum = segments[segments.length - 1];
-                d.value = lastNum ? lastNum : raw;
-            } catch(e) { d.value = raw; }
-            if (raw === '0') freshInput = true;
+            if (justCalc || op !== null) { clearDisplay(); return; }
+            let s = displayStr.replace(/,/g, '');
+            s = s.length > 1 ? s.slice(0, -1) : '0';
+            updateDisplay(s === '0' ? '0' : formatNum(parseFloat(s)) === s ? s : s);
+            if (s === '0') justCalc = false;
         }
 
-        function calcPercent() {
-            const d = document.getElementById('display');
-            let raw = getRaw();
-            try {
-                const match = raw.match(/^(.*[+\-*/])(\-?\d+\.?\d*)$/);
-                let result;
-                if (match) {
-                    const base = eval(match[1].slice(0, -1));
-                    const pct = parseFloat(match[2]) / 100;
-                    result = base * pct;
-                    raw = match[1] + result;
-                    d.dataset.raw = raw;
-                    d.value = formatDisplay(result);
-                } else {
-                    const num = parseFloat(raw.replace(/,/g, ''));
-                    if (isNaN(num)) return;
-                    result = parseFloat((num / 100).toPrecision(10));
-                    d.dataset.raw = String(result);
-                    d.value = formatDisplay(result);
-                }
-                freshInput = true;
-            } catch(e) {}
-        }
-
-        function memory(op) {
-            const d = document.getElementById('display');
-            const cur = parseFloat(getRaw().replace(/,/g, '')) || 0;
-            if (op === 'MC') {
+        function memory(m) {
+            let cur = parseFloat(displayStr.replace(/,/g, '')) || 0;
+            if (m === 'MC') {
                 memValue = 0;
                 document.getElementById('mem-label-value').textContent = '0';
-                const mrVal = document.getElementById('mr-label-value');
-                mrVal.style.display = 'none';
+                document.getElementById('mr-label-value').style.display = 'none';
                 showToast('메모리 초기화');
-            } else if (op === 'MR') {
-                d.dataset.raw = String(memValue);
-                d.value = formatDisplay(memValue);
-                freshInput = true;
-                const mrVal = document.getElementById('mr-label-value');
-                mrVal.textContent = formatDisplay(memValue);
-                mrVal.style.display = 'inline';
-                showToast('MR: ' + formatDisplay(memValue));
-            } else if (op === 'M+') {
+            } else if (m === 'MR') {
+                updateDisplay(formatNum(memValue));
+                numA = null; op = null; numB = null; justCalc = true;
+                const mrv = document.getElementById('mr-label-value');
+                mrv.textContent = formatNum(memValue);
+                mrv.style.display = 'inline';
+                showToast('MR: ' + formatNum(memValue));
+            } else if (m === 'M+') {
                 memValue = parseFloat((memValue + cur).toPrecision(10));
-                document.getElementById('mem-label-value').textContent = formatDisplay(memValue);
-                showToast('M+: ' + formatDisplay(memValue));
-            } else if (op === 'M-') {
+                document.getElementById('mem-label-value').textContent = formatNum(memValue);
+                showToast('M+: ' + formatNum(memValue));
+            } else if (m === 'M-') {
                 memValue = parseFloat((memValue - cur).toPrecision(10));
-                document.getElementById('mem-label-value').textContent = formatDisplay(memValue);
-                showToast('M-: ' + formatDisplay(memValue));
+                document.getElementById('mem-label-value').textContent = formatNum(memValue);
+                showToast('M-: ' + formatNum(memValue));
             }
         }
 
@@ -322,20 +264,15 @@
             document.getElementById('mySidenav').classList.add('open');
             document.getElementById('overlay').classList.add('show');
         }
-
         function closeMenu() {
             document.getElementById('mySidenav').classList.remove('open');
             document.getElementById('overlay').classList.remove('show');
         }
-
         function changeTheme(color, textColor) {
             document.documentElement.style.setProperty('--main-theme', color);
             document.documentElement.style.setProperty('--text-color', textColor || '#000');
             closeMenu();
         }
-
-        // Initialize display raw value
-        document.getElementById('display').dataset.raw = '0';
     </script>
 </body>
 </html>
