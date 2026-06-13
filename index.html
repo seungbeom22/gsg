@@ -110,28 +110,38 @@
 
         const disp = () => document.getElementById('display');
 
-        function formatNum(n) {
-            if (n === null || isNaN(n)) return '0';
-            let parts = n.toString().split('.');
+        function formatDisplay(val) {
+            if (val === '오류') return val;
+            let parts = val.toString().split('.');
             parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             return parts.join('.');
         }
 
         function updateDisplay(val) {
-            displayStr = val.toString();
-            if (displayStr === '오류') {
-                disp().value = '오류';
-                return;
-            }
-            let isDecimal = displayStr.endsWith('.');
-            let cleanVal = displayStr.replace(/,/g, '');
-            disp().value = formatNum(cleanVal) + (isDecimal ? '.' : '');
+            displayStr = val;
+            disp().value = formatDisplay(val);
+        }
+
+        function formatNum(n) {
+            if (n === null || isNaN(n)) return '오류';
+            return parseFloat(n.toPrecision(10)).toString();
         }
 
         function inputNum(n) {
-            if (justCalc) { numA = null; op = null; numB = null; justCalc = false; updateDisplay(n); return; }
-            if (op === null) { updateDisplay(displayStr === '0' ? n : displayStr + n); }
-            else { updateDisplay(numB === null ? n : displayStr + n); numB = 'typing'; }
+            if (justCalc) {
+                numA = null; op = null; numB = null;
+                justCalc = false;
+                updateDisplay(n);
+                return;
+            }
+            if (op === null) {
+                if (displayStr === '0') updateDisplay(n);
+                else updateDisplay(displayStr + n);
+            } else {
+                if (numB === null) updateDisplay(n);
+                else updateDisplay(displayStr + n);
+                numB = 'typing';
+            }
         }
 
         function inputDot() {
@@ -144,13 +154,13 @@
             let cur = parseFloat(displayStr.replace(/,/g, ''));
             if (op !== null && numB !== null && numB !== 'typing') {
                 cur = doCalc(numA, op, parseFloat(displayStr.replace(/,/g,'')));
-                updateDisplay(cur.toString());
+                updateDisplay(formatNum(cur));
             }
             numA = isNaN(cur) ? 0 : cur;
             op = o;
             numB = null;
             const opSymbol = o === '*' ? '×' : o === '/' ? '÷' : o;
-            disp().value = formatNum(numA) + ' ' + opSymbol;
+            disp().value = formatDisplay(formatNum(numA)) + ' ' + opSymbol;
         }
 
         function doCalc(a, operator, b) {
@@ -168,17 +178,25 @@
             let b = parseFloat(displayStr.replace(/,/g, ''));
             if (numB === null || numB === 'typing') numB = b;
             let result = doCalc(numA, op, numB);
-            if (isNaN(result)) updateDisplay('오류');
-            else { updateDisplay(result.toString()); numA = result; }
-            justCalc = true; op = null; numB = null;
+            result = parseFloat(parseFloat(result).toPrecision(10));
+            if (isNaN(result)) {
+                updateDisplay('오류');
+            } else {
+                updateDisplay(formatNum(result));
+                numA = result;
+            }
+            justCalc = true;
+            op = null;
+            numB = null;
         }
 
         function calcPercent() {
             let cur = parseFloat(displayStr.replace(/,/g, ''));
             if (isNaN(cur)) return;
             let result = (op !== null && numA !== null) ? numA * (cur / 100) : cur / 100;
+            result = parseFloat(result.toPrecision(10));
             numB = result;
-            updateDisplay(result.toString());
+            updateDisplay(formatNum(result));
             justCalc = true;
         }
 
@@ -192,19 +210,41 @@
             let s = displayStr.replace(/,/g, '');
             s = s.length > 1 ? s.slice(0, -1) : '0';
             updateDisplay(s);
+            if (s === '0') justCalc = false;
         }
 
         function memory(m) {
             let cur = parseFloat(displayStr.replace(/,/g, '')) || 0;
-            if (m === 'MC') { memValue = 0; document.getElementById('mem-label-value').textContent = '0'; document.getElementById('mr-label').textContent = ''; }
-            else if (m === 'MR') { updateDisplay(memValue.toString()); numA = null; op = null; numB = null; justCalc = true; document.getElementById('mr-label').textContent = 'MR: ' + formatNum(memValue); }
-            else if (m === 'M+') { memValue += cur; document.getElementById('mem-label-value').textContent = formatNum(memValue); }
-            else if (m === 'M-') { memValue -= cur; document.getElementById('mem-label-value').textContent = formatNum(memValue); }
+            if (m === 'MC') {
+                memValue = 0;
+                document.getElementById('mem-label-value').textContent = '0';
+                document.getElementById('mr-label').textContent = '';
+            } else if (m === 'MR') {
+                updateDisplay(formatNum(memValue));
+                numA = null; op = null; numB = null; justCalc = true;
+                document.getElementById('mr-label').textContent = 'MR: ' + formatDisplay(formatNum(memValue));
+            } else if (m === 'M+') {
+                memValue = parseFloat((memValue + cur).toPrecision(10));
+                document.getElementById('mem-label-value').textContent = formatDisplay(formatNum(memValue));
+            } else if (m === 'M-') {
+                memValue = parseFloat((memValue - cur).toPrecision(10));
+                document.getElementById('mem-label-value').textContent = formatDisplay(formatNum(memValue));
+            }
         }
 
-        function openMenu() { document.getElementById('mySidenav').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
-        function closeMenu() { document.getElementById('mySidenav').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
-        function changeTheme(color, textColor) { document.documentElement.style.setProperty('--main-theme', color); document.documentElement.style.setProperty('--text-color', textColor || '#000'); closeMenu(); }
+        function openMenu() {
+            document.getElementById('mySidenav').classList.add('open');
+            document.getElementById('overlay').classList.add('show');
+        }
+        function closeMenu() {
+            document.getElementById('mySidenav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        }
+        function changeTheme(color, textColor) {
+            document.documentElement.style.setProperty('--main-theme', color);
+            document.documentElement.style.setProperty('--text-color', textColor || '#000');
+            closeMenu();
+        }
     </script>
 </body>
 </html>
