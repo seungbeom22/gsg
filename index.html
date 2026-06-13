@@ -4,11 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Calculator</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root { --main-theme: #ff9500; --text-color: #000; }
+        * { -webkit-user-select: none; user-select: none; box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #f2f4f7; display: flex; justify-content: center; align-items: center; }
+        .layout { display: flex; align-items: flex-start; gap: 0; }
+        .calculator { width: 360px; background: #fff; padding: 18px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+        .calc-header { display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 14px; font-weight: bold; font-size: 20px; }
+        .hamburger { font-size: 28px; cursor: pointer; position: absolute; left: 0; z-index: 2; }
+        .title-text { display: flex; align-items: baseline; gap: 6px; }
+        .display-wrap { margin-bottom: 12px; }
+        .display-bottom { font-size: 11px; color: #aaa; padding-left: 4px; min-height: 16px; margin-top: 2px; }
+        .mem-side { display: flex; flex-direction: column; gap: 4px; margin-right: 12px; min-width: 72px; padding-top: 4px; }
+        .mem-side-title { font-size: 11px; color: #aaa; text-align: center; }
+        .mem-side-value { font-size: 15px; font-weight: bold; color: #333; text-align: center; background: #f0f0f0; border-radius: 8px; padding: 6px 4px; min-height: 34px; display: flex; align-items: center; justify-content: center; word-break: break-all; }
+        #display { width: 100%; height: 70px; font-size: 38px; text-align: right; border: 2px solid #ddd; border-radius: 10px; padding: 8px 12px; background: #fafafa; display: block; outline: none; }
+        .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        button { height: 64px; border-radius: 14px; border: none; font-size: 22px; font-weight: bold; cursor: pointer; background: #e0e0e0; transition: opacity 0.1s; }
+        button:active { opacity: 0.7; }
+        .operator { background-color: var(--main-theme); color: var(--text-color); font-size: 30px; }
+        .btn-ac { background-color: #ff3b30; color: #fff; }
+        .btn-del { background-color: #ff9500; color: #fff; }
+        .btn-equals { background-color: var(--main-theme); color: var(--text-color); font-size: 34px; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 998; }
+        .overlay.show { display: block; }
+        .side-menu { height: 100%; width: 260px; position: fixed; top: 0; left: 0; background: #111; overflow: hidden; transition: transform 0.3s ease; z-index: 1000; transform: translateX(-100%); }
+        .side-menu.open { transform: translateX(0); }
+        .closebtn { position: absolute; top: 10px; right: 20px; color: #ff3b30; font-size: 36px; cursor: pointer; }
+        .menu-content { padding: 18px; color: #fff; margin-top: 50px; }
+        .theme-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .theme-buttons button { height: auto; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; padding: 10px; font-size: 13px; }
+        .dev-info { margin-bottom: 18px; }
+    </style>
 </head>
 <body>
     <div id="overlay" class="overlay" onclick="closeMenu()"></div>
-
     <div id="mySidenav" class="side-menu">
         <span class="closebtn" onclick="closeMenu()">&times;</span>
         <div class="menu-content">
@@ -18,146 +48,163 @@
             </div>
             <h3>테마 설정</h3>
             <div class="theme-buttons">
-                <button onclick="changeTheme('#FF3B30')" style="background:#FF3B30;color:#fff;">빨강</button>
-                <button onclick="changeTheme('#FF9500')" style="background:#FF9500;color:#fff;">주황</button>
-                <button onclick="changeTheme('#FFCC00')" style="background:#FFCC00;color:#000;">노랑</button>
-                <button onclick="changeTheme('#4CD964')" style="background:#4CD964;color:#000;">초록</button>
-                <button onclick="changeTheme('#007AFF')" style="background:#007AFF;color:#fff;">파랑</button>
-                <button onclick="changeTheme('#5AC8FA')" style="background:#5AC8FA;color:#000;">하늘</button>
-                <button onclick="changeTheme('#8E8E93')" style="background:#8E8E93;color:#fff;">회색</button>
-                <button onclick="changeTheme('#000000')" style="background:#000000;color:#fff;">검정</button>
+                <button onclick="changeTheme('#FF3B30','#fff')" style="background:#FF3B30;color:#fff;">빨강</button>
+                <button onclick="changeTheme('#FF9500','#000')" style="background:#FF9500;color:#fff;">주황</button>
+                <button onclick="changeTheme('#FFCC00','#000')" style="background:#FFCC00;color:#000;">노랑</button>
+                <button onclick="changeTheme('#4CD964','#000')" style="background:#4CD964;color:#000;">초록</button>
+                <button onclick="changeTheme('#007AFF','#fff')" style="background:#007AFF;color:#fff;">파랑</button>
+                <button onclick="changeTheme('#5AC8FA','#000')" style="background:#5AC8FA;color:#000;">하늘</button>
+                <button onclick="changeTheme('#8E8E93','#fff')" style="background:#8E8E93;color:#fff;">회색</button>
+                <button onclick="changeTheme('#000000','#fff')" style="background:#000000;color:#fff;">검정</button>
             </div>
         </div>
     </div>
 
     <div class="layout">
+        <div class="mem-side">
+            <div class="mem-side-title">합계</div>
+            <div class="mem-side-value" id="mem-label-value">0</div>
+        </div>
         <div class="calculator">
             <div class="calc-header">
                 <span class="hamburger" onclick="openMenu()">&#9776;</span>
                 <span class="title-text">계산기 <small>v2.0</small></span>
             </div>
-            <div id="toast" class="toast"></div>
-
-            <div class="display-wrap" style="position:relative;">
-                <div class="mem-label" style="position:absolute;top:6px;right:10px;z-index:1;font-size:10px;color:#aaa;margin:0;padding:0;">합계 <span id="mem-label-value">0</span></div>
+            <div class="display-wrap">
                 <input type="text" id="display" value="0" readonly>
-                <div id="mr-label" style="font-size:11px;color:#aaa;text-align:right;padding-right:4px;min-height:16px;margin-top:2px;"></div>
+                <div id="mr-label" class="display-bottom"></div>
             </div>
-
             <div class="buttons">
                 <button onclick="memory('MC')">MC</button>
                 <button onclick="memory('MR')">MR</button>
                 <button onclick="memory('M+')">M+</button>
                 <button onclick="memory('M-')">M-</button>
-
                 <button class="btn-ac" onclick="clearDisplay()">AC</button>
                 <button class="btn-del" onclick="deleteLast()">⌫</button>
-                <button class="operator" onclick="appendToDisplay('/')">÷</button>
-                <button class="operator" onclick="appendToDisplay('*')">×</button>
-
-                <button onclick="appendToDisplay('7')" style="font-size:30px">7</button>
-                <button onclick="appendToDisplay('8')" style="font-size:30px">8</button>
-                <button onclick="appendToDisplay('9')" style="font-size:30px">9</button>
-                <button class="operator" onclick="appendToDisplay('-')">-</button>
-
-                <button onclick="appendToDisplay('4')" style="font-size:30px">4</button>
-                <button onclick="appendToDisplay('5')" style="font-size:30px">5</button>
-                <button onclick="appendToDisplay('6')" style="font-size:30px">6</button>
-                <button class="operator" onclick="appendToDisplay('+')">+</button>
-
-                <button onclick="appendToDisplay('1')" style="font-size:30px">1</button>
-                <button onclick="appendToDisplay('2')" style="font-size:30px">2</button>
-                <button onclick="appendToDisplay('3')" style="font-size:30px">3</button>
+                <button class="operator" onclick="inputOp('/')">÷</button>
+                <button class="operator" onclick="inputOp('*')">×</button>
+                <button onclick="inputNum('7')" style="font-size:30px">7</button>
+                <button onclick="inputNum('8')" style="font-size:30px">8</button>
+                <button onclick="inputNum('9')" style="font-size:30px">9</button>
+                <button class="operator" onclick="inputOp('-')">-</button>
+                <button onclick="inputNum('4')" style="font-size:30px">4</button>
+                <button onclick="inputNum('5')" style="font-size:30px">5</button>
+                <button onclick="inputNum('6')" style="font-size:30px">6</button>
+                <button class="operator" onclick="inputOp('+')">+</button>
+                <button onclick="inputNum('1')" style="font-size:30px">1</button>
+                <button onclick="inputNum('2')" style="font-size:30px">2</button>
+                <button onclick="inputNum('3')" style="font-size:30px">3</button>
                 <button class="operator" onclick="calcPercent()">%</button>
-
-                <button onclick="appendToDisplay('0')">0</button>
-                <button onclick="appendToDisplay('.')">.</button>
+                <button onclick="inputNum('0')" style="font-size:30px">0</button>
+                <button onclick="inputDot()" style="font-size:30px">.</button>
                 <button class="operator btn-equals" onclick="calculate()" style="grid-column:span 2;">=</button>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
     <script>
-    // MR 라벨 표시 (showToast 오버라이드)
-    const _origShowToast = showToast;
-    window.showToast = function(msg) {
-        _origShowToast(msg);
-        if (msg.startsWith('MR')) {
-            document.getElementById('mr-label').textContent = msg;
-        }
-    };
+        let numA = null, op = null, numB = null;
+        let displayStr = '0';
+        let justCalc = false;
+        let memValue = 0;
 
-    // % 기능
-    function calcPercent() {
-        let d = document.getElementById('display');
-        let raw = getRaw();
-        const match = raw.match(/^(.*[+\-*/])(\d+\.?\d*)$/);
-        if (match) {
-            let base = eval(match[1].slice(0, -1));
-            let pct = parseFloat(match[2]) / 100;
-            let result = base * pct;
-            raw = match[1] + result;
-        } else {
-            let num = parseFloat(raw.replace(/,/g,''));
-            if (isNaN(num)) return;
-            raw = String(num / 100);
-        }
-        d.dataset.raw = raw;
-        d.value = formatDisplay(parseFloat(raw));
-        freshInput = true;
-    }
+        const disp = () => document.getElementById('display');
 
-    // 소수점 자릿수 제한: calculate 래핑
-    const _origCalc = calculate;
-    window.calculate = function() {
-        _origCalc();
-        let d = document.getElementById('display');
-        let raw = d.dataset.raw;
-        if (raw && raw !== '오류' && String(raw).includes('.')) {
-            let num = parseFloat(raw);
-            if (!isNaN(num)) {
-                let rounded = parseFloat(num.toPrecision(10));
-                d.dataset.raw = String(rounded);
-                d.value = formatDisplay(rounded);
+        function formatNum(n) {
+            if (n === null || isNaN(n)) return '0';
+            let parts = n.toString().split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return parts.join('.');
+        }
+
+        function updateDisplay(val) {
+            displayStr = val.toString();
+            if (displayStr === '오류') {
+                disp().value = '오류';
+                return;
             }
+            let isDecimal = displayStr.endsWith('.');
+            let cleanVal = displayStr.replace(/,/g, '');
+            disp().value = formatNum(cleanVal) + (isDecimal ? '.' : '');
         }
-    };
-    </script>
-    <script>
-        // 디스플레이 숫자 글씨 크게
-        document.getElementById('display').style.fontSize = '38px';
 
-        // 퍼센트 함수
+        function inputNum(n) {
+            if (justCalc) { numA = null; op = null; numB = null; justCalc = false; updateDisplay(n); return; }
+            if (op === null) { updateDisplay(displayStr === '0' ? n : displayStr + n); }
+            else { updateDisplay(numB === null ? n : displayStr + n); numB = 'typing'; }
+        }
+
+        function inputDot() {
+            if (justCalc) { numA=null; op=null; numB=null; justCalc=false; updateDisplay('0.'); return; }
+            if (!displayStr.includes('.')) updateDisplay(displayStr + '.');
+        }
+
+        function inputOp(o) {
+            justCalc = false;
+            let cur = parseFloat(displayStr.replace(/,/g, ''));
+            if (op !== null && numB !== null && numB !== 'typing') {
+                cur = doCalc(numA, op, parseFloat(displayStr.replace(/,/g,'')));
+                updateDisplay(cur.toString());
+            }
+            numA = isNaN(cur) ? 0 : cur;
+            op = o;
+            numB = null;
+            const opSymbol = o === '*' ? '×' : o === '/' ? '÷' : o;
+            disp().value = formatNum(numA) + ' ' + opSymbol;
+        }
+
+        function doCalc(a, operator, b) {
+            switch(operator) {
+                case '+': return a + b;
+                case '-': return a - b;
+                case '*': return a * b;
+                case '/': return b === 0 ? NaN : a / b;
+            }
+            return b;
+        }
+
+        function calculate() {
+            if (op === null) return;
+            let b = parseFloat(displayStr.replace(/,/g, ''));
+            if (numB === null || numB === 'typing') numB = b;
+            let result = doCalc(numA, op, numB);
+            if (isNaN(result)) updateDisplay('오류');
+            else { updateDisplay(result.toString()); numA = result; }
+            justCalc = true; op = null; numB = null;
+        }
+
         function calcPercent() {
-            let d = document.getElementById('display');
-            let raw = getRaw();
-            try {
-                let val = eval(raw);
-                let result = parseFloat((val / 100).toPrecision(10));
-                d.dataset.raw = String(result);
-                d.value = formatDisplay(result);
-                freshInput = true;
-            } catch(e) {}
+            let cur = parseFloat(displayStr.replace(/,/g, ''));
+            if (isNaN(cur)) return;
+            let result = (op !== null && numA !== null) ? numA * (cur / 100) : cur / 100;
+            numB = result;
+            updateDisplay(result.toString());
+            justCalc = true;
         }
 
-        // 소수점 자릿수 제한 (calculate 오버라이드)
-        calculate = function() {
-            try {
-                let d = document.getElementById('display');
-                let raw = getRaw();
-                let result = eval(raw.replace(/×/g, '*').replace(/÷/g, '/'));
-                result = parseFloat(parseFloat(result).toPrecision(10));
-                d.dataset.raw = String(result);
-                d.value = formatDisplay(result);
-                freshInput = true;
-                history.replaceState(null, '');
-            } catch {
-                let d = document.getElementById('display');
-                d.dataset.raw = '오류';
-                d.value = '오류';
-            }
-        };
+        function clearDisplay() {
+            numA = null; op = null; numB = null; justCalc = false;
+            updateDisplay('0');
+        }
+
+        function deleteLast() {
+            if (justCalc || op !== null) { clearDisplay(); return; }
+            let s = displayStr.replace(/,/g, '');
+            s = s.length > 1 ? s.slice(0, -1) : '0';
+            updateDisplay(s);
+        }
+
+        function memory(m) {
+            let cur = parseFloat(displayStr.replace(/,/g, '')) || 0;
+            if (m === 'MC') { memValue = 0; document.getElementById('mem-label-value').textContent = '0'; document.getElementById('mr-label').textContent = ''; }
+            else if (m === 'MR') { updateDisplay(memValue.toString()); numA = null; op = null; numB = null; justCalc = true; document.getElementById('mr-label').textContent = 'MR: ' + formatNum(memValue); }
+            else if (m === 'M+') { memValue += cur; document.getElementById('mem-label-value').textContent = formatNum(memValue); }
+            else if (m === 'M-') { memValue -= cur; document.getElementById('mem-label-value').textContent = formatNum(memValue); }
+        }
+
+        function openMenu() { document.getElementById('mySidenav').classList.add('open'); document.getElementById('overlay').classList.add('show'); }
+        function closeMenu() { document.getElementById('mySidenav').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
+        function changeTheme(color, textColor) { document.documentElement.style.setProperty('--main-theme', color); document.documentElement.style.setProperty('--text-color', textColor || '#000'); closeMenu(); }
     </script>
 </body>
 </html>
