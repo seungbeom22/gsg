@@ -2,221 +2,244 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>타자 연습</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculator</title>
     <style>
-        :root { --accent: #5b4ef0; --bg: #f0f2fc; --correct: #22c55e; --wrong: #ef4444; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 30px 20px; min-height: 100vh; }
-        h1 { color: var(--accent); margin-bottom: 18px; font-size: 28px; letter-spacing: 2px; }
-        .time-btns { display: flex; gap: 10px; margin-bottom: 18px; }
-        .time-btn { padding: 8px 22px; font-size: 17px; font-weight: bold; border: 2px solid var(--accent); border-radius: 8px; background: white; color: var(--accent); cursor: pointer; transition: all 0.15s; }
-        .time-btn.active { background: var(--accent); color: white; }
-        .stats { display: flex; gap: 30px; margin-bottom: 20px; font-size: 20px; font-weight: bold; color: #333; }
-        .stats span { color: var(--accent); font-size: 24px; }
-        #display-area { width: 100%; max-width: 900px; height: 130px; background: white; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); margin-bottom: 20px; overflow: hidden; position: relative; }
-        #display-area::before, #display-area::after { content: ''; position: absolute; top: 0; bottom: 0; width: 100px; z-index: 2; pointer-events: none; }
-        #display-area::before { left: 0; background: linear-gradient(to right, white 40%, transparent); }
-        #display-area::after  { right: 0; background: linear-gradient(to left, white 40%, transparent); }
-        #belt { display: flex; align-items: center; height: 100%; position: absolute; left: 50%; white-space: nowrap; transition: transform 0.08s ease-out; }
-        .char { font-size: 54px; font-weight: bold; color: #bbb; min-width: 0.55em; text-align: center; transition: color 0.08s; letter-spacing: 0.04em; }
-        .char.done-ok  { color: var(--correct); }
-        .char.done-err { color: var(--wrong); }
-        .char.current  { color: #111; }
-        .char.current::after { content: ''; display: block; height: 4px; background: var(--accent); border-radius: 2px; animation: blink 0.8s infinite; }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-        #typing-input { width: 100%; max-width: 900px; height: 80px; font-size: 34px; padding: 10px 20px; border: 3px solid var(--accent); border-radius: 15px; text-align: center; outline: none; font-family: inherit; ime-mode: active; }
-        #typing-input:focus { box-shadow: 0 0 0 3px rgba(91,78,240,0.25); }
-        #typing-input.correct-bg { border-color: var(--correct); }
-        #typing-input.wrong-bg   { border-color: var(--wrong); background: #fff5f5; }
-        #hint { font-size: 14px; color: #999; margin-top: 6px; height: 18px; }
-        .btns { display: flex; gap: 14px; margin-top: 16px; }
-        .btns button { padding: 12px 28px; font-size: 18px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
-        #btn-restart { background: var(--accent); color: white; }
-        #btn-lang    { background: #e2e8f0; color: #333; }
-        #records-panel { width: 100%; max-width: 900px; margin-top: 30px; }
-        #records-panel h2 { margin-bottom: 10px; color: #444; font-size: 20px; }
-        #records-list { display: flex; flex-direction: column; gap: 8px; }
-        .record-row { background: white; border-radius: 10px; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.07); font-size: 16px; }
-        .record-row .rank { font-weight: bold; color: var(--accent); width: 32px; }
-        .record-row .rec-wpm { font-size: 22px; font-weight: bold; color: #222; }
-        .record-row .rec-acc { color: #666; }
-        .record-row .rec-time { color: #888; font-size: 14px; }
-        .record-row .rec-date { color: #aaa; font-size: 13px; }
-        #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); align-items: center; justify-content: center; z-index: 10; }
-        #overlay.show { display: flex; }
-        #result-box { background: white; border-radius: 24px; padding: 40px 50px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.2); min-width: 320px; }
-        #result-box h2 { font-size: 26px; margin-bottom: 20px; color: #333; }
-        .res-label { font-size: 16px; color: #888; margin-top: 16px; }
-        .res-num { font-size: 64px; font-weight: bold; color: var(--accent); line-height: 1.1; }
-        .res-acc { font-size: 26px; font-weight: bold; color: #22c55e; }
-        #result-box button { margin-top: 26px; padding: 14px 40px; font-size: 20px; background: var(--accent); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
+        :root { --main-theme: #ff9500; --text-color: #000; }
+        * { -webkit-user-select: none; user-select: none; box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #f2f4f7; display: flex; justify-content: center; align-items: center; }
+        .layout { display: flex; align-items: flex-start; gap: 0; }
+        
+        /* 계산기 전체 패딩 축소 */
+        .calculator { width: 360px; background: #fff; padding: 12px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+        .calc-header { display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 10px; font-weight: bold; font-size: 20px; }
+        .hamburger { font-size: 28px; cursor: pointer; position: absolute; left: 0; z-index: 2; }
+        .title-text { display: flex; align-items: baseline; gap: 6px; }
+        .display-wrap { margin-bottom: 10px; }
+        .display-bottom { font-size: 11px; color: #aaa; padding-left: 4px; min-height: 16px; margin-top: 2px; }
+        
+        #display { width: 100%; height: 60px; font-size: 38px; text-align: right; border: 2px solid #ddd; border-radius: 10px; padding: 8px 12px; background: #fafafa; display: block; outline: none; }
+        .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        
+        /* 버튼 높이 축소 */
+        button { height: 55px; border-radius: 14px; border: none; font-size: 22px; font-weight: bold; cursor: pointer; background: #e0e0e0; transition: opacity 0.1s; }
+        button:active { opacity: 0.7; }
+        .operator { background-color: var(--main-theme); color: var(--text-color); font-size: 30px; }
+        .btn-ac { background-color: #ff3b30; color: #fff; }
+        .btn-del { background-color: #ff9500; color: #fff; }
+        .btn-equals { background-color: var(--main-theme); color: var(--text-color); font-size: 34px; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 998; }
+        .overlay.show { display: block; }
+        .side-menu { height: 100%; width: 260px; position: fixed; top: 0; left: 0; background: #111; overflow: hidden; transition: transform 0.3s ease; z-index: 1000; transform: translateX(-100%); }
+        .side-menu.open { transform: translateX(0); }
+        .closebtn { position: absolute; top: 10px; right: 20px; color: #ff3b30; font-size: 36px; cursor: pointer; }
+        .menu-content { padding: 18px; color: #fff; margin-top: 50px; }
+        .theme-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .theme-buttons button { height: auto; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; padding: 10px; font-size: 13px; }
+        .dev-info { margin-bottom: 18px; }
     </style>
 </head>
 <body>
-
-<h1>⌨️ 타자 연습</h1>
-<div class="time-btns">
-    <button class="time-btn" data-sec="60">1분</button>
-    <button class="time-btn active" data-sec="180">3분</button>
-    <button class="time-btn" data-sec="300">5분</button>
-</div>
-<div class="stats">
-    <div>시간: <span id="stat-time">180</span>s</div>
-    <div>타수: <span id="stat-wpm">0</span></div>
-    <div>정확도: <span id="stat-acc">100</span>%</div>
-    <div id="lang-label">🇰🇷 한글</div>
-</div>
-<div id="display-area"><div id="belt"></div></div>
-<input type="text" id="typing-input" placeholder="단어를 입력하고 스페이스를 누르세요" autocomplete="off" spellcheck="false">
-<div id="hint"></div>
-<div class="btns">
-    <button id="btn-restart">🔄 다시 시작</button>
-    <button id="btn-lang">🔁 영어로 전환</button>
-</div>
-<div id="records-panel">
-    <h2>📊 최근 기록 (자동 저장)</h2>
-    <div id="records-list"></div>
-</div>
-<div id="overlay">
-    <div id="result-box">
-        <h2>🎉 결과</h2>
-        <div class="res-label">타수 (타/분)</div>
-        <div class="res-num" id="res-wpm">0</div>
-        <div class="res-label">정확도</div>
-        <div class="res-acc" id="res-acc">100%</div>
-        <button onclick="restartGame()">다시 시작</button>
+    <div id="overlay" class="overlay" onclick="closeMenu()"></div>
+    <div id="mySidenav" class="side-menu">
+        <span class="closebtn" onclick="closeMenu()">&times;</span>
+        <div class="menu-content">
+            <div class="dev-info">
+                <h3>Developer</h3>
+                <p>안녕하세요 파수범입니다.<br>이것은 저의 첫 코딩 작품입니다.<br>많은 관심 부탁드립니다.</p>
+            </div>
+            <h3>테마 설정</h3>
+            <div class="theme-buttons">
+                <button onclick="changeTheme('#FF3B30','#fff')" style="background:#FF3B30;color:#fff;">빨강</button>
+                <button onclick="changeTheme('#FF9500','#000')" style="background:#FF9500;color:#fff;">주황</button>
+                <button onclick="changeTheme('#FFCC00','#000')" style="background:#FFCC00;color:#000;">노랑</button>
+                <button onclick="changeTheme('#4CD964','#000')" style="background:#4CD964;color:#000;">초록</button>
+                <button onclick="changeTheme('#007AFF','#fff')" style="background:#007AFF;color:#fff;">파랑</button>
+                <button onclick="changeTheme('#5AC8FA','#000')" style="background:#5AC8FA;color:#000;">하늘</button>
+                <button onclick="changeTheme('#8E8E93','#fff')" style="background:#8E8E93;color:#fff;">회색</button>
+                <button onclick="changeTheme('#000000','#fff')" style="background:#000000;color:#fff;">검정</button>
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
-const WORDS = {
-    ko: ['사과','바나나','하늘','구름','강아지','고양이','자동차','기차','비행기','노트북','스마트폰','커피','도서관','학교','병원','공원','바다','산','강','꽃','나무','음악','영화','책상','의자','창문','시계','달력','연필','지우개','공부','운동','여행','요리','사진','음식','날씨','계절','봄','여름','가을','겨울','태양','달','별','우주','과학','기술','미래','행복','성공','노력','친구','가족','사랑','추억','꿈','희망','도전','승리','대한민국','서울','부산','제주도','한강','경복궁','비빔밥','김치','불고기','삼겹살','컴퓨터','인터넷','소프트웨어','알고리즘','데이터','프로그램','화면','키보드','마우스','스크린'],
-    en: ['apple','banana','keyboard','typing','practice','speed','accuracy','computer','monitor','screen','program','software','language','science','nature','weather','sunshine','rainbow','butterfly','mountain','ocean','forest','journey','adventure','knowledge','learning','success','challenge','victory','happiness','family','friend','memory','future','present','history','culture','music','rhythm','melody','database','network','server','browser','function','variable','constant','object','string','number','python','javascript','algorithm','interface','performance','developer','creative','together']
-};
+    <div class="layout">
+        <div class="calculator">
+            <div class="calc-header">
+                <span class="hamburger" onclick="openMenu()">&#9776;</span>
+                <span class="title-text">계산기 <small>v2.0</small></span>
+            </div>
+            <div class="display-wrap">
+                <input type="text" id="display" value="0" readonly>
+                <div id="mr-label" class="display-bottom"></div>
+            </div>
+            <div class="buttons">
+                <button onclick="memory('MC')">MC</button>
+                <button onclick="memory('MR')">MR</button>
+                <button onclick="memory('M+')">M+</button>
+                <button onclick="memory('M-')">M-</button>
+                <button class="btn-ac" onclick="clearDisplay()">AC</button>
+                <button class="btn-del" onclick="deleteLast()">⌫</button>
+                <button class="operator" onclick="inputOp('/')">÷</button>
+                <button class="operator" onclick="inputOp('*')">×</button>
+                <button onclick="inputNum('7')">7</button>
+                <button onclick="inputNum('8')">8</button>
+                <button onclick="inputNum('9')">9</button>
+                <button class="operator" onclick="inputOp('-')">-</button>
+                <button onclick="inputNum('4')">4</button>
+                <button onclick="inputNum('5')">5</button>
+                <button onclick="inputNum('6')">6</button>
+                <button class="operator" onclick="inputOp('+')">+</button>
+                <button onclick="inputNum('1')">1</button>
+                <button onclick="inputNum('2')">2</button>
+                <button onclick="inputNum('3')">3</button>
+                <button class="operator" onclick="calcPercent()">%</button>
+                <button onclick="inputNum('0')">0</button>
+                <button onclick="inputDot()">.</button>
+                <button class="operator btn-equals" onclick="calculate()" style="grid-column:span 2;">=</button>
+            </div>
+        </div>
+    </div>
 
-function decompose(str) {
-    let count = 0;
-    for (const ch of str) {
-        const code = ch.charCodeAt(0);
-        if (code >= 0xAC00 && code <= 0xD7A3) {
-            const offset = code - 0xAC00;
-            count += (offset % 28) > 0 ? 3 : 2;
-        } else if (ch !== ' ') { count += 1; }
-    }
-    return count;
-}
+    <script>
+        let numA = null, op = null, numB = null;
+        let displayStr = '0';
+        let justCalc = false;
+        let memValue = 0;
 
-let lang = 'ko', totalSeconds = 180, wordQueue = [], charList = [], wordBoundaries = [], curWordPtr = 0, correctWordCount = 0, wrongWordCount = 0, correctCharSum = 0, startTime = null, timerInterval = null, gameOver = false;
+        const disp = () => document.getElementById('display');
 
-const belt = document.getElementById('belt');
-function refillQueue() { const pool = [...WORDS[lang]].sort(() => Math.random() - 0.5); wordQueue.push(...pool); }
-function nextWord() { if (wordQueue.length < 10) refillQueue(); return wordQueue.shift(); }
-
-function renderBelt() {
-    belt.innerHTML = ''; charList = []; wordBoundaries = []; curWordPtr = 0;
-    for (let wi = 0; wi < 15; wi++) {
-        const word = nextWord();
-        const start = charList.length;
-        for (const ch of word) {
-            const span = document.createElement('span'); span.className = 'char'; span.textContent = ch; belt.appendChild(span);
-            charList.push({ ch, el: span, wi });
+        function formatDisplay(val) {
+            if (val === '오류') return val;
+            let parts = val.toString().split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return parts.join('.');
         }
-        wordBoundaries.push({ start, end: charList.length - 1, word });
-        if (wi < 14) {
-            const sp = document.createElement('span'); sp.className = 'char'; sp.textContent = '\u00A0'; belt.appendChild(sp);
-            charList.push({ ch: ' ', el: sp, wi: -1 });
+
+        function updateDisplay(val) {
+            displayStr = val;
+            disp().value = formatDisplay(val);
         }
-    }
-    highlightCurrentWord(); updateBeltPosition();
-}
 
-function highlightCurrentWord() {
-    if (curWordPtr >= wordBoundaries.length) return;
-    const { start, end } = wordBoundaries[curWordPtr];
-    for (let i = start; i <= end; i++) charList[i].el.classList.add('current');
-}
-
-function updateBeltPosition() {
-    if (curWordPtr >= wordBoundaries.length) return;
-    const { start, end } = wordBoundaries[curWordPtr];
-    const firstEl = charList[start].el; const lastEl = charList[end].el;
-    const wordCenter = firstEl.offsetLeft + (lastEl.offsetLeft + lastEl.offsetWidth - firstEl.offsetLeft) / 2;
-    belt.style.transform = `translateX(-${wordCenter}px)`;
-}
-
-function calcWPM(elapsed) {
-    if (!elapsed || elapsed <= 0) return 0;
-    const minutes = elapsed / 60;
-    // 표준 방식: (총 타수 / 5) / 분
-    return Math.round((correctCharSum / 5) / minutes);
-}
-
-function calcAcc() {
-    const total = correctWordCount + wrongWordCount;
-    return total === 0 ? 100 : Math.round((correctWordCount / total) * 100);
-}
-
-function initGame() {
-    clearInterval(timerInterval); gameOver = false; startTime = null; correctWordCount = 0; wrongWordCount = 0; correctCharSum = 0; curWordPtr = 0; wordQueue = [];
-    document.getElementById('stat-wpm').textContent = 0; document.getElementById('stat-acc').textContent = 100;
-    document.getElementById('overlay').classList.remove('show'); refillQueue(); renderBelt();
-    const input = document.getElementById('typing-input'); input.value = ''; input.disabled = false; input.focus();
-}
-
-function startTimer() {
-    startTime = Date.now();
-    timerInterval = setInterval(() => {
-        const elapsed = (Date.now() - startTime) / 1000;
-        const timeLeft = Math.max(0, totalSeconds - elapsed);
-        document.getElementById('stat-time').textContent = Math.ceil(timeLeft);
-        document.getElementById('stat-wpm').textContent = calcWPM(elapsed);
-        document.getElementById('stat-acc').textContent = calcAcc();
-        if (timeLeft <= 0) endGame();
-    }, 200);
-}
-
-function endGame() {
-    clearInterval(timerInterval); gameOver = true; document.getElementById('typing-input').disabled = true;
-    const wpm = calcWPM(totalSeconds);
-    document.getElementById('res-wpm').textContent = wpm;
-    document.getElementById('res-acc').textContent = calcAcc() + '%';
-    document.getElementById('overlay').classList.add('show');
-}
-
-const input = document.getElementById('typing-input');
-input.addEventListener('input', () => { if (!startTime && input.value.length > 0) startTimer(); });
-input.addEventListener('keydown', (e) => {
-    if (gameOver) return;
-    if (e.key === ' ' || e.key === 'Enter') {
-        e.preventDefault();
-        const typed = input.value.trim();
-        if (typed.length === 0) return;
-        const { start, end, word } = wordBoundaries[curWordPtr];
-        const ok = typed === word;
-        for (let i = start; i <= end; i++) {
-            charList[i].el.classList.remove('current');
-            charList[i].el.classList.add(ok ? 'done-ok' : 'done-err');
+        function formatNum(n) {
+            if (n === null || isNaN(n)) return '오류';
+            return parseFloat(n.toPrecision(10)).toString();
         }
-        if (ok) { correctWordCount++; correctCharSum += (lang === 'ko' ? decompose(word) : word.length); }
-        else { wrongWordCount++; }
-        curWordPtr++;
-        highlightCurrentWord(); updateBeltPosition(); input.value = '';
-    }
-});
 
-document.querySelectorAll('.time-btn').forEach(btn => btn.addEventListener('click', () => {
-    document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active'); totalSeconds = parseInt(btn.dataset.sec); initGame();
-}));
+        function inputNum(n) {
+            if (justCalc) {
+                numA = null; op = null; numB = null;
+                justCalc = false;
+                updateDisplay(n);
+                return;
+            }
+            if (op === null) {
+                if (displayStr === '0') updateDisplay(n);
+                else updateDisplay(displayStr + n);
+            } else {
+                if (numB === null) updateDisplay(n);
+                else updateDisplay(displayStr + n);
+                numB = 'typing';
+            }
+        }
 
-document.getElementById('btn-restart').addEventListener('click', initGame);
-document.getElementById('btn-lang').addEventListener('click', () => {
-    lang = lang === 'ko' ? 'en' : 'ko';
-    document.getElementById('lang-label').textContent = lang === 'ko' ? '🇰🇷 한글' : '🇺🇸 영어';
-    initGame();
-});
+        function inputDot() {
+            if (justCalc) { numA=null; op=null; numB=null; justCalc=false; updateDisplay('0.'); return; }
+            if (!displayStr.includes('.')) updateDisplay(displayStr + '.');
+        }
 
-initGame();
-</script>
+        function inputOp(o) {
+            justCalc = false;
+            let cur = parseFloat(displayStr.replace(/,/g, ''));
+            if (op !== null && numB !== null && numB !== 'typing') {
+                cur = doCalc(numA, op, parseFloat(displayStr.replace(/,/g,'')));
+                updateDisplay(formatNum(cur));
+            }
+            numA = isNaN(cur) ? 0 : cur;
+            op = o;
+            numB = null;
+            const opSymbol = o === '*' ? '×' : o === '/' ? '÷' : o;
+            disp().value = formatDisplay(formatNum(numA)) + ' ' + opSymbol;
+        }
+
+        function doCalc(a, operator, b) {
+            switch(operator) {
+                case '+': return a + b;
+                case '-': return a - b;
+                case '*': return a * b;
+                case '/': return b === 0 ? NaN : a / b;
+            }
+            return b;
+        }
+
+        function calculate() {
+            if (op === null) return;
+            let b = parseFloat(displayStr.replace(/,/g, ''));
+            if (numB === null || numB === 'typing') numB = b;
+            let result = doCalc(numA, op, numB);
+            result = parseFloat(parseFloat(result).toPrecision(10));
+            if (isNaN(result)) {
+                updateDisplay('오류');
+            } else {
+                updateDisplay(formatNum(result));
+                numA = result;
+            }
+            justCalc = true;
+            op = null;
+            numB = null;
+        }
+
+        function calcPercent() {
+            let cur = parseFloat(displayStr.replace(/,/g, ''));
+            if (isNaN(cur)) return;
+            let result = (op !== null && numA !== null) ? numA * (cur / 100) : cur / 100;
+            result = parseFloat(result.toPrecision(10));
+            numB = result;
+            updateDisplay(formatNum(result));
+            justCalc = true;
+        }
+
+        function clearDisplay() {
+            numA = null; op = null; numB = null; justCalc = false;
+            updateDisplay('0');
+        }
+
+        function deleteLast() {
+            if (justCalc || op !== null) { clearDisplay(); return; }
+            let s = displayStr.replace(/,/g, '');
+            s = s.length > 1 ? s.slice(0, -1) : '0';
+            updateDisplay(s);
+            if (s === '0') justCalc = false;
+        }
+
+        function memory(m) {
+            let cur = parseFloat(displayStr.replace(/,/g, '')) || 0;
+            if (m === 'MC') {
+                memValue = 0;
+                document.getElementById('mr-label').textContent = '';
+            } else if (m === 'MR') {
+                updateDisplay(formatNum(memValue));
+                numA = null; op = null; numB = null; justCalc = true;
+                document.getElementById('mr-label').textContent = 'MR: ' + formatDisplay(formatNum(memValue));
+            } else if (m === 'M+') {
+                memValue = parseFloat((memValue + cur).toPrecision(10));
+            } else if (m === 'M-') {
+                memValue = parseFloat((memValue - cur).toPrecision(10));
+            }
+        }
+
+        function openMenu() {
+            document.getElementById('mySidenav').classList.add('open');
+            document.getElementById('overlay').classList.add('show');
+        }
+        function closeMenu() {
+            document.getElementById('mySidenav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        }
+        function changeTheme(color, textColor) {
+            document.documentElement.style.setProperty('--main-theme', color);
+            document.documentElement.style.setProperty('--text-color', textColor || '#000');
+            closeMenu();
+        }
+    </script>
 </body>
 </html>
