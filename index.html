@@ -19,7 +19,7 @@
         .mem-side-title { font-size: 11px; color: #aaa; text-align: center; }
         .mem-side-value { font-size: 15px; font-weight: bold; color: #333; text-align: center; background: #f0f0f0; border-radius: 8px; padding: 6px 4px; min-height: 34px; display: flex; align-items: center; justify-content: center; word-break: break-all; }
         /* 수정된 부분: 체크박스 컨테이너 스타일 */
-        .checkbox-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; font-size: 10px; color: #aaa; }
+        .checkbox-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; }
         
         #display { width: 100%; height: 70px; font-size: 38px; text-align: right; border: 2px solid #ddd; border-radius: 10px; padding: 8px 12px; background: #fafafa; display: block; outline: none; }
         .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
@@ -64,14 +64,7 @@
     </div>
 
     <div class="layout">
-        <div class="mem-side">
-            <!-- 수정된 부분: 체크박스 아래에 '합계' 표시 -->
-            <div class="checkbox-container">
-                <input type="checkbox">
-                <span>합계</span>
-            </div>
-            <div class="mem-side-value" id="mem-label-value">0</div>
-        </div>
+
         <div class="calculator">
             <div class="calc-header">
                 <span class="hamburger" onclick="openMenu()">&#9776;</span>
@@ -222,9 +215,10 @@
 
         function memory(m) {
             let cur = parseFloat(displayStr.replace(/,/g, '')) || 0;
+            const memLabel = document.getElementById('mem-label-value');
             if (m === 'MC') {
                 memValue = 0;
-                document.getElementById('mem-label-value').textContent = '0';
+                if (memLabel) memLabel.textContent = '0';
                 document.getElementById('mr-label').textContent = '';
             } else if (m === 'MR') {
                 updateDisplay(formatNum(memValue));
@@ -232,10 +226,10 @@
                 document.getElementById('mr-label').textContent = 'MR: ' + formatDisplay(formatNum(memValue));
             } else if (m === 'M+') {
                 memValue = parseFloat((memValue + cur).toPrecision(10));
-                document.getElementById('mem-label-value').textContent = formatDisplay(formatNum(memValue));
+                if (memLabel) memLabel.textContent = formatDisplay(formatNum(memValue));
             } else if (m === 'M-') {
                 memValue = parseFloat((memValue - cur).toPrecision(10));
-                document.getElementById('mem-label-value').textContent = formatDisplay(formatNum(memValue));
+                if (memLabel) memLabel.textContent = formatDisplay(formatNum(memValue));
             }
         }
 
