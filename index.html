@@ -257,8 +257,19 @@
         function changeTheme(color, textColor) {
             document.documentElement.style.setProperty('--main-theme', color);
             document.documentElement.style.setProperty('--text-color', textColor || '#000');
+            localStorage.setItem('theme-color', color);
+            localStorage.setItem('theme-text', textColor || '#000');
             closeMenu();
         }
+
+        (function loadSavedTheme() {
+            const color = localStorage.getItem('theme-color');
+            const textColor = localStorage.getItem('theme-text');
+            if (color) {
+                document.documentElement.style.setProperty('--main-theme', color);
+                document.documentElement.style.setProperty('--text-color', textColor || '#000');
+            }
+        })();
     </script>
 </body>
 </html>
