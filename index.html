@@ -103,172 +103,158 @@
 
     <script>
         let numA = null, op = null, numB = null;
-        let displayStr = '0';
+        let aStr = '0';    // A 숫자 문자열
+        let bStr = '';     // B 숫자 입력 중 문자열
+        let fullExpr = ''; // 화면에 보여줄 전체 식 (예: "50 ÷ 2 ×")
         let justCalc = false;
         let memValue = 0;
 
         const disp = () => document.getElementById('display');
 
-        function formatDisplay(val) {
-            if (val === '오류') return val;
-            let parts = val.toString().split('.');
-            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            return parts.join('.');
+        function sym(o) { return o==='*'?'×':o==='/'?'÷':o; }
+
+        function fmtN(n) {
+            if (n===null||isNaN(n)) return '오류';
+            let v = parseFloat(n.toPrecision(10));
+            if (!Number.isInteger(v)) v = parseFloat(v.toFixed(3));
+            return v.toString();
         }
 
-        function updateDisplay(val) {
-            displayStr = val;
-            disp().value = formatDisplay(val);
-        }
-
-        function formatNum(n) {
-            if (n === null || isNaN(n)) return '오류';
-            let val = parseFloat(n.toPrecision(10));
-            // 소수점 3자리까지만 표시
-            if (!Number.isInteger(val)) {
-                val = parseFloat(val.toFixed(3));
-            }
-            return val.toString();
+        function fmtD(s) {
+            if (s==='오류') return s;
+            let p = s.toString().split('.');
+            p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return p.join('.');
         }
 
         function inputNum(n) {
             if (justCalc) {
-                numA = null; op = null; numB = null;
-                justCalc = false;
-                updateDisplay(n);
-                return;
+                // 계산 직후 숫자 → 새 계산 시작
+                numA=null; op=null; numB=null; justCalc=false;
+                aStr=n; bStr=''; fullExpr=n;
+                disp().value = n; return;
             }
             if (op === null) {
-                if (displayStr === '0') updateDisplay(n);
-                else updateDisplay(displayStr + n);
+                // A 입력 중
+                aStr = (aStr==='0') ? n : aStr+n;
+                fullExpr = aStr;
+                disp().value = fmtD(aStr);
             } else {
-                if (numB === null) updateDisplay(n);
-                else updateDisplay(displayStr + n);
+                // B 입력 중
+                bStr = (bStr==='') ? n : bStr+n;
                 numB = 'typing';
+                // fullExpr = "50 ÷ 2" 형태로 갱신 (연산자까지 있던 부분 + bStr)
+                const opPart = fullExpr.endsWith(' '+sym(op)) ? fullExpr : fullExpr.split(' ').slice(0,-1).join(' ');
+                disp().value = opPart + ' ' + fmtD(bStr);
             }
         }
 
         function inputDot() {
-            if (justCalc) { numA=null; op=null; numB=null; justCalc=false; updateDisplay('0.'); return; }
-            if (!displayStr.includes('.')) updateDisplay(displayStr + '.');
+            if (justCalc) { numA=null;op=null;numB=null;justCalc=false; aStr='0.';bStr='';fullExpr='0.';disp().value='0.';return; }
+            if (op===null) {
+                if (!aStr.includes('.')) { aStr+='.'; fullExpr=aStr; disp().value=aStr; }
+            } else {
+                if (bStr==='') bStr='0';
+                if (!bStr.includes('.')) {
+                    bStr+='.'; numB='typing';
+                    disp().value = fullExpr + ' ' + bStr;
+                }
+            }
         }
 
         function inputOp(o) {
             justCalc = false;
-            let cur = parseFloat(displayStr.replace(/,/g, ''));
-            // 이전 연산자가 있고 숫자를 입력 중이면 먼저 계산
-            if (op !== null && numB === 'typing') {
-                cur = doCalc(numA, op, parseFloat(displayStr.replace(/,/g,'')));
-                cur = parseFloat(parseFloat(cur).toPrecision(10));
+            if (op!==null && numB==='typing') {
+                // 연속 연산: 내부 계산 갱신, 화면엔 전체 식 누적
+                numA = doCalc(numA, op, parseFloat(bStr));
+                numA = isNaN(numA) ? 0 : parseFloat(numA.toPrecision(10));
+                // fullExpr에 방금 입력한 bStr과 새 연산자 추가
+                fullExpr = fullExpr.endsWith(' '+sym(op))
+                    ? fullExpr + ' ' + fmtD(bStr) + ' ' + sym(o)
+                    : fullExpr + ' ' + fmtD(bStr) + ' ' + sym(o);
+            } else {
+                numA = parseFloat(aStr) || 0;
+                fullExpr = fmtD(aStr) + ' ' + sym(o);
             }
-            numA = isNaN(cur) ? 0 : cur;
-            op = o;
-            numB = null;
-            displayStr = formatNum(numA);
-            const opSymbol = o === '*' ? '×' : o === '/' ? '÷' : o;
-            disp().value = formatDisplay(formatNum(numA)) + ' ' + opSymbol;
+            op=o; numB=null; bStr='';
+            disp().value = fullExpr;
         }
 
         function doCalc(a, operator, b) {
             switch(operator) {
-                case '+': return a + b;
-                case '-': return a - b;
-                case '*': return a * b;
-                case '/': return b === 0 ? NaN : a / b;
+                case '+': return a+b;
+                case '-': return a-b;
+                case '*': return a*b;
+                case '/': return b===0?NaN:a/b;
             }
             return b;
         }
 
         function calculate() {
-            if (op === null) return;
-            let b = parseFloat(displayStr.replace(/,/g, ''));
-            if (numB === null || numB === 'typing') numB = b;
-            let result = doCalc(numA, op, numB);
+            if (op===null) return;
+            const b = bStr==='' ? numA : parseFloat(bStr);
+            let result = doCalc(numA, op, b);
             result = parseFloat(parseFloat(result).toPrecision(10));
-            if (isNaN(result)) {
-                updateDisplay('오류');
-            } else {
-                updateDisplay(formatNum(result));
-                numA = result;
-            }
-            justCalc = true;
-            op = null;
-            numB = null;
+            op=null; numB=null; bStr=''; fullExpr=''; justCalc=true;
+            if (isNaN(result)) { aStr='오류'; disp().value='오류'; }
+            else { aStr=fmtN(result); numA=result; disp().value=fmtD(aStr); }
         }
 
         function calcPercent() {
-            let cur = parseFloat(displayStr.replace(/,/g, ''));
+            const cur = op===null ? parseFloat(aStr) : parseFloat(bStr||'0');
             if (isNaN(cur)) return;
-            let result = (op !== null && numA !== null) ? numA * (cur / 100) : cur / 100;
+            let result = (op!==null&&numA!==null) ? numA*(cur/100) : cur/100;
             result = parseFloat(result.toPrecision(10));
-            numB = result;
-            updateDisplay(formatNum(result));
-            justCalc = true;
+            const rs = fmtN(result);
+            if (op===null) { aStr=rs; fullExpr=rs; }
+            else { bStr=rs; numB=result; }
+            disp().value = fmtD(rs);
+            justCalc=true;
         }
 
         function clearDisplay() {
-            numA = null; op = null; numB = null; justCalc = false;
-            updateDisplay('0');
+            numA=null;op=null;numB=null;justCalc=false;
+            aStr='0'; bStr=''; fullExpr=''; disp().value='0';
         }
 
         function deleteLast() {
-            if (justCalc || op !== null) { clearDisplay(); return; }
-            let s = displayStr.replace(/,/g, '');
-            s = s.length > 1 ? s.slice(0, -1) : '0';
-            updateDisplay(s);
-            if (s === '0') justCalc = false;
+            if (justCalc||op!==null) { clearDisplay(); return; }
+            aStr = aStr.length>1 ? aStr.slice(0,-1) : '0';
+            fullExpr = aStr;
+            disp().value = fmtD(aStr);
         }
 
         function updateMemStatus() {
-            const el = document.getElementById('mem-status');
-            if (memValue === 0) {
-                el.textContent = '';
-            } else {
-                el.textContent = 'M: ' + formatDisplay(formatNum(memValue));
-            }
+            const el=document.getElementById('mem-status');
+            el.textContent = memValue===0 ? '' : 'M: '+fmtD(fmtN(memValue));
         }
-
         function memory(m) {
-            let cur = parseFloat(displayStr.replace(/,/g, '')) || 0;
-            if (m === 'MC') {
-                memValue = 0;
-                updateMemStatus();
-            } else if (m === 'MR') {
-                // MR: 메모리 값을 화면에 불러옴. 이후 연산 가능하도록 justCalc=false
-                updateDisplay(formatNum(memValue));
-                numA = parseFloat(formatNum(memValue)); op = null; numB = null; justCalc = false;
-                updateMemStatus();
-            } else if (m === 'M+') {
-                memValue = parseFloat((memValue + cur).toPrecision(10));
-                updateMemStatus();
-            } else if (m === 'M-') {
-                memValue = parseFloat((memValue - cur).toPrecision(10));
-                updateMemStatus();
+            const cur = parseFloat(op===null ? aStr : (bStr||'0')) || 0;
+            if (m==='MC') { memValue=0; }
+            else if (m==='MR') {
+                aStr=fmtN(memValue); bStr=''; op=null; numA=parseFloat(aStr); numB=null; justCalc=false;
+                fullExpr=aStr; disp().value=fmtD(aStr);
             }
+            else if (m==='M+') memValue=parseFloat((memValue+cur).toPrecision(10));
+            else if (m==='M-') memValue=parseFloat((memValue-cur).toPrecision(10));
+            updateMemStatus();
         }
 
-        function openMenu() {
-            document.getElementById('mySidenav').classList.add('open');
-            document.getElementById('overlay').classList.add('show');
-        }
-        function closeMenu() {
-            document.getElementById('mySidenav').classList.remove('open');
-            document.getElementById('overlay').classList.remove('show');
-        }
+        function openMenu()  { document.getElementById('mySidenav').classList.add('open');    document.getElementById('overlay').classList.add('show'); }
+        function closeMenu() { document.getElementById('mySidenav').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
         function changeTheme(color, textColor) {
             document.documentElement.style.setProperty('--main-theme', color);
-            document.documentElement.style.setProperty('--text-color', textColor || '#000');
+            document.documentElement.style.setProperty('--text-color', textColor||'#000');
             localStorage.setItem('theme-color', color);
-            localStorage.setItem('theme-text', textColor || '#000');
+            localStorage.setItem('theme-text', textColor||'#000');
             closeMenu();
         }
-
         (function loadSavedTheme() {
-            const color = localStorage.getItem('theme-color');
-            const textColor = localStorage.getItem('theme-text');
+            const color=localStorage.getItem('theme-color');
+            const tc=localStorage.getItem('theme-text');
             if (color) {
                 document.documentElement.style.setProperty('--main-theme', color);
-                document.documentElement.style.setProperty('--text-color', textColor || '#000');
+                document.documentElement.style.setProperty('--text-color', tc||'#000');
             }
         })();
     </script>
