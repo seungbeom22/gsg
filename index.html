@@ -240,8 +240,22 @@
             updateMemStatus();
         }
 
-        function openMenu()  { document.getElementById('mySidenav').classList.add('open');    document.getElementById('overlay').classList.add('show'); }
-        function closeMenu() { document.getElementById('mySidenav').classList.remove('open'); document.getElementById('overlay').classList.remove('show'); }
+        function openMenu() {
+            document.getElementById('mySidenav').classList.add('open');
+            document.getElementById('overlay').classList.add('show');
+            history.pushState({ menuOpen: true }, '');
+        }
+        function closeMenu() {
+            document.getElementById('mySidenav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+            if (history.state && history.state.menuOpen) {
+                history.back();
+            }
+        }
+        window.addEventListener('popstate', function() {
+            document.getElementById('mySidenav').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        });
         function changeTheme(color, textColor) {
             document.documentElement.style.setProperty('--main-theme', color);
             document.documentElement.style.setProperty('--text-color', textColor||'#000');
